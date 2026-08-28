@@ -412,15 +412,12 @@ export default function ProductsTeaser() {
           </div>
         </div>
 
-        {products.length > 3 ? (
-          <ProductCarousel products={products} />
-        ) : (
-          <div className="products-teaser__grid">
-            {products.map((p, i) => (
-              <ProductCard key={p.id} p={p} i={i} />
-            ))}
-          </div>
-        )}
+        {/* Responsive grid — all products shown at once, 3-col desktop, 2 tablet, 1 mobile */}
+        <div className="products-teaser__grid">
+          {products.map((p, i) => (
+            <ProductCard key={p.id} p={p} i={i} />
+          ))}
+        </div>
       </div>
     </section>
   );
