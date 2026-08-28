@@ -5,7 +5,7 @@ import logo from "../assets/logo.jpeg";
 import LanguageSelector from "./LanguageSelector";
 
 const NAV_LINKS = [
-  { label: "Home", to: "/#home" },
+  { label: "Home", to: "/" },
   { label: "About", to: "/about" },
   { label: "Products", to: "/products" },
   { label: "Contact Us", to: "/contact" },

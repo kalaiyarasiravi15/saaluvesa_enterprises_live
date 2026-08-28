@@ -29,7 +29,7 @@ export default function Footer() {
         {/* Column 2: Navigate */}
         <div className="site-footer__col">
           <h4>Navigate</h4>
-          <a href="/#home">Home</a>
+          <Link to="/">Home</Link>
           <Link to="/about">About Us</Link>
           <Link to="/products">Products</Link>
           <Link to="/contact">Contact Us</Link>

@@ -179,9 +179,28 @@ export default function LanguageSelector() {
   const handleSelect = useCallback((lang) => {
     setSelected(lang);
     setOpen(false);
+    const prevLang = localStorage.getItem("saalu_selected_lang") || "en";
     localStorage.setItem("saalu_selected_lang", lang.code);
     window.dispatchEvent(new CustomEvent("saalu_language_changed", { detail: lang.code }));
-    applyLanguage(lang.code);
+
+    if (lang.code === "en") {
+      // Switching to English -> wipe all target cookies, set /en/en, apply & reload if coming from foreign lang
+      if (typeof window.clearGoogleTranslateCookie === "function") {
+        window.clearGoogleTranslateCookie();
+      }
+      applyLanguage("en");
+      if (prevLang !== "en") {
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+      }
+    } else {
+      // Switching to a foreign language -> set cookie & apply live
+      if (typeof window.setGoogTransCookie === "function") {
+        window.setGoogTransCookie(lang.code);
+      }
+      applyLanguage(lang.code);
+    }
   }, []);
 
   return (
