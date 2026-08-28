@@ -146,12 +146,33 @@ export default function LanguageSelector() {
     });
   }, [search, selectedCountry]);
 
+  // On mount, restore saved language from localStorage
+  useEffect(() => {
+    const savedCode = localStorage.getItem("saalu_selected_lang");
+    if (savedCode) {
+      const lang = LANGUAGES.find((l) => l.code === savedCode);
+      if (lang) {
+        setSelected(lang);
+        applyLanguage(savedCode);
+      }
+    }
+  }, []);
+
   // Handle language selection
   const handleSelect = useCallback((lang) => {
     setSelected(lang);
     setOpen(false);
+    const prevLang = localStorage.getItem("saalu_selected_lang") || "en";
+    localStorage.setItem("saalu_selected_lang", lang.code);
     window.dispatchEvent(new CustomEvent("saalu_language_changed", { detail: lang.code }));
     applyLanguage(lang.code);
+
+    // Refresh page once if language changes so entire site DOM translates 100% completely
+    if (prevLang !== lang.code) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 120);
+    }
   }, []);
 
   return (

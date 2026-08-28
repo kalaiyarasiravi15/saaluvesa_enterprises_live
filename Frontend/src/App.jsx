@@ -44,8 +44,8 @@ function ReapplySelectedLanguageOnNavigation() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const languageCode = getActiveLanguageCode();
-    if (languageCode === "en") return undefined;
+    const languageCode = localStorage.getItem("saalu_selected_lang") || getActiveLanguageCode();
+    if (!languageCode || languageCode === "en") return undefined;
 
     const timer = setTimeout(() => applyLanguage(languageCode), 0);
     return () => clearTimeout(timer);
