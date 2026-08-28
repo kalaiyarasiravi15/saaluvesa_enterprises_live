@@ -534,43 +534,125 @@
 /* ===== Mobile ===== */
 @media (max-width: 560px) {
   .hero {
-    padding: 14px 0 20px 0;
+    padding: 24px 0 36px 0;
   }
 
   .hero__inner {
-    gap: 14px;
-    padding: 0 14px;
+    gap: 18px;
+    padding: 0 20px;
   }
 
   .hero__eyebrow {
-    margin-bottom: 6px;
-    font-size: 0.72rem;
+    margin-bottom: 8px;
+    font-size: 0.74rem;
   }
 
   .hero__headline {
-    font-size: clamp(1.4rem, 6.2vw, 1.75rem);
-    margin-bottom: 8px;
-    line-height: 1.16;
+    font-size: clamp(1.45rem, 6.2vw, 1.85rem);
+    margin-bottom: 12px;
+    line-height: 1.2;
   }
 
   .hero__sub {
-    font-size: 0.82rem;
-    line-height: 1.5;
-    margin-bottom: 12px;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    margin-bottom: 16px;
   }
 
   .hero__notice-card {
-    flex-direction: column;
-    border-radius: var(--radius-sm);
-    padding: 11px 13px;
-    gap: 8px;
-    margin-top: 6px;
+    flex-direction: row;
+    align-items: flex-start;
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .hero__notice-icon-box {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    margin-top: 2px;
+  }
+
+  .hero__notice-icon-box svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hero__notice-text {
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+
+  .hero__notice-link {
+    font-size: 0.82rem;
+  }
+
+  .hero__notice-external-icon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .hero__visual {
+    aspect-ratio: 16 / 10;
+    max-height: 230px;
+  }
+
+  .hero__badge {
+    padding: 7px 12px;
+    border-radius: 8px;
+  }
+
+  .hero__badge-num {
+    font-size: 0.95rem;
+  }
+
+  .hero__badge-label {
+    font-size: 0.65rem;
+  }
+}
+
+/* ===== Small phones ===== */
+@media (max-width: 400px) {
+  .hero {
+    padding: 20px 0 28px 0;
+  }
+
+  .hero__inner {
+    gap: 16px;
+    padding: 0 18px;
+  }
+
+  .hero__headline {
+    font-size: 1.4rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+
+  .hero__eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  .hero__sub {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .hero__notice-card {
+    padding: 12px 14px;
+    gap: 10px;
+    margin-top: 8px;
   }
 
   .hero__notice-icon-box {
     width: 28px;
     height: 28px;
     min-width: 28px;
+    border-radius: 8px;
   }
 
   .hero__notice-icon-box svg {
@@ -579,108 +661,28 @@
   }
 
   .hero__notice-text {
-    font-size: 0.80rem;
+    font-size: 0.78rem;
     line-height: 1.5;
   }
 
   .hero__notice-link {
-    font-size: 0.78rem;
-  }
-
-  .hero__notice-external-icon {
-    width: 12px;
-    height: 12px;
+    font-size: 0.76rem;
   }
 
   .hero__visual {
-    aspect-ratio: 16 / 10;
-    max-height: 210px;
+    max-height: 190px;
   }
 
   .hero__badge {
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 5px 9px;
+    border-radius: 7px;
   }
 
   .hero__badge-num {
-    font-size: 0.92rem;
+    font-size: 0.85rem;
   }
 
   .hero__badge-label {
-    font-size: 0.62rem;
-  }
-}
-
-/* ===== Small phones ===== */
-@media (max-width: 400px) {
-  .hero {
-    padding: 10px 0 16px 0;
-  }
-
-  .hero__inner {
-    gap: 12px;
-    padding: 0 12px;
-  }
-
-  .hero__headline {
-    font-size: 1.3rem;
-    letter-spacing: -0.01em;
-    margin-bottom: 6px;
-  }
-
-  .hero__eyebrow {
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
-  }
-
-  .hero__sub {
-    font-size: 0.78rem;
-    line-height: 1.45;
-    margin-bottom: 10px;
-  }
-
-  .hero__notice-card {
-    padding: 9px 11px;
-    gap: 6px;
-    margin-top: 4px;
-  }
-
-  .hero__notice-icon-box {
-    width: 26px;
-    height: 26px;
-    min-width: 26px;
-    border-radius: 6px;
-  }
-
-  .hero__notice-icon-box svg {
-    width: 13px;
-    height: 13px;
-  }
-
-  .hero__notice-text {
-    font-size: 0.74rem;
-    line-height: 1.45;
-  }
-
-  .hero__notice-link {
-    font-size: 0.72rem;
-  }
-
-  .hero__visual {
-    max-height: 175px;
-  }
-
-  .hero__badge {
-    padding: 4px 7px;
-    border-radius: 6px;
-  }
-
-  .hero__badge-num {
-    font-size: 0.8rem;
-  }
-
-  .hero__badge-label {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
   }
 }
