@@ -1,5 +1,5 @@
 /* =====================================================
-   SITE FOOTER — 5 Columns, Full .wrap Width Alignment
+   SITE FOOTER — 5-Column Responsive Layout & Alignment
    ===================================================== */
 
 .site-footer {
@@ -8,22 +8,25 @@
   position: relative;
   border-top: 1px solid var(--color-line);
   width: 100%;
+  overflow-x: hidden;
 }
 
-/* Force left alignment & normal word spacing across EVERYTHING in footer */
+/* Force crisp left alignment & normal word spacing across all content */
 .site-footer,
-.site-footer *,
-.site-footer *::before,
-.site-footer *::after {
-  text-align: left !important;
-  word-spacing: normal !important;
-  word-break: normal !important;
+.site-footer p,
+.site-footer a,
+.site-footer span,
+.site-footer li,
+.site-footer div {
+  text-align: left;
+  word-spacing: normal;
+  word-break: normal;
 }
 
-/* ── 5-Column Grid spanning full container width ── */
+/* ── 5-Column Grid (Desktop >1100px) ── */
 .site-footer__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.85fr) minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, 1.35fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.85fr) minmax(0, 1.05fr) minmax(0, 1.1fr) minmax(0, 1.3fr);
   gap: 28px 24px;
   max-width: var(--container);
   margin: 0 auto;
@@ -32,9 +35,11 @@
   border-bottom: 1px solid var(--color-line);
   position: relative;
   z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* ── Brand column ── */
+/* ── Column 1: Brand & Credentials ── */
 .site-footer__brand {
   min-width: 0;
 }
@@ -77,14 +82,15 @@
   align-items: center;
   gap: 7px;
   margin-top: 14px;
-  padding: 5px 12px;
+  padding: 6px 12px;
   background: rgba(7, 16, 91, 0.05);
   border: 1px solid rgba(7, 16, 91, 0.12);
   border-radius: 999px;
   font-size: 0.74rem;
   font-weight: 600;
   color: var(--color-navy);
-  white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .trust-badge__dot {
@@ -95,7 +101,7 @@
   flex-shrink: 0;
 }
 
-/* ── Content columns ── */
+/* ── Content Columns (2, 3, 4, 5) ── */
 .site-footer__col {
   min-width: 0;
 }
@@ -110,7 +116,7 @@
   font-weight: 700;
 }
 
-/* Navigation links */
+/* Navigation Links */
 .site-footer__col > a,
 .site-footer__col > a:visited {
   display: block;
@@ -125,7 +131,7 @@
   color: var(--color-navy);
 }
 
-/* ── Footer icons ── */
+/* Icons */
 .footer-icon {
   width: 14px;
   height: 14px;
@@ -134,7 +140,7 @@
   display: block;
 }
 
-/* ── Castbull link ── */
+/* Castbull Store Link */
 .site-footer__castbull-link {
   display: inline-flex !important;
   align-items: center;
@@ -150,7 +156,7 @@
   color: var(--color-mint-dim) !important;
 }
 
-/* ── Contact items ── */
+/* Contact Items */
 .site-footer__contact-item {
   display: flex !important;
   align-items: center;
@@ -165,7 +171,7 @@
   color: var(--color-navy);
 }
 
-/* ── Sourcing & Hours ── */
+/* Sourcing & Hours */
 .site-footer__hours {
   margin-top: 0;
   padding: 0;
@@ -188,7 +194,7 @@
   line-height: 1.4;
 }
 
-/* ── Global Exports ── */
+/* Global Exports */
 .site-footer__exports {
   margin-top: 14px !important;
   padding: 0 !important;
@@ -211,7 +217,7 @@
   line-height: 1.4;
 }
 
-/* ── Address ── */
+/* Address Block */
 .site-footer__address {
   display: flex;
   align-items: flex-start;
@@ -231,7 +237,7 @@
   color: var(--color-ink-soft);
 }
 
-/* ── Bottom bar ── */
+/* ── Bottom Bar ── */
 .site-footer__bottom {
   display: flex;
   align-items: center;
@@ -245,6 +251,8 @@
   color: var(--color-ink-soft);
   position: relative;
   z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .site-footer__copy,
@@ -272,19 +280,19 @@
 }
 
 /* =====================================================
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE BREAKPOINTS (Mobile & Tablet Optimization)
    ===================================================== */
 
-/* Large Tablet (769px–1100px) — 3 Columns */
-@media (max-width: 1100px) {
+/* ── Laptop / Small Desktop (961px – 1150px): 3 Columns ── */
+@media (max-width: 1150px) {
   .site-footer__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 32px 28px;
   }
 }
 
-/* Small Tablet (541px–768px) — 2 Columns */
-@media (max-width: 768px) {
+/* ── Tablet (601px – 960px): 2 Columns ── */
+@media (max-width: 960px) {
   .site-footer {
     padding-top: 40px;
   }
@@ -295,43 +303,65 @@
     padding-bottom: 32px;
   }
 
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+
   .site-footer__bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    flex-direction: row;
+    justify-content: space-between;
     padding: 18px 20px 22px;
     font-size: 0.82rem;
   }
 }
 
-/* Mobile (≤540px) — Single Column */
-@media (max-width: 540px) {
+/* ── Mobile (≤600px): Clean 2-column or 1-column layout ── */
+@media (max-width: 600px) {
   .site-footer {
     padding-top: 32px;
   }
 
   .site-footer__grid {
     grid-template-columns: 1fr;
-    gap: 22px;
-    padding: 0 16px 24px;
+    gap: 24px;
+    padding: 0 20px 24px;
   }
 
   .site-footer__brand {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    grid-column: auto;
+  }
+
+  .site-footer__col h4 {
+    margin-bottom: 10px;
+    font-size: 0.76rem;
+  }
+
+  .site-footer__col > a {
+    padding: 6px 0;
+    font-size: 0.9rem;
+  }
+
+  .site-footer__contact-item {
+    padding: 6px 0;
+    font-size: 0.9rem;
   }
 
   .site-footer__bottom {
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 16px 16px 20px;
+    text-align: center;
+    gap: 8px;
+    padding: 18px 16px 22px;
     font-size: 0.78rem;
   }
 
   .site-footer__bottom,
   .site-footer__bottom * {
     text-align: center !important;
+  }
+
+  .site-footer__copy,
+  .site-footer__dev {
+    justify-content: center;
   }
 }
