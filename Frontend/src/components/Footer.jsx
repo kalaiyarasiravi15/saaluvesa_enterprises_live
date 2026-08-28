@@ -67,9 +67,10 @@ export default function Footer() {
             <span>+91 94884 10884</span>
           </a>
 
-          <p className="site-footer__hours">
-            <span>Sourcing Support:</span> Mon – Sat: 9:00 AM – 7:00 PM IST
-          </p>
+          <div className="site-footer__hours">
+            <span className="hours-label">Sourcing Support</span>
+            <span className="hours-val">Mon – Sat: 9:00 AM – 7:00 PM IST</span>
+          </div>
         </div>
 
         {/* Column 4: Registered Office & Export Destinations */}
@@ -88,9 +89,10 @@ export default function Footer() {
               Erode, Tamil Nadu – 638459, India
             </p>
           </div>
-          <p className="site-footer__exports">
-            <span>Global Exports:</span> Shipping to USA, Europe, UAE, Australia & Worldwide.
-          </p>
+          <div className="site-footer__exports">
+            <span className="exports-label">Global Exports</span>
+            <span className="exports-val">USA, Europe, UAE, Australia &amp; Worldwide</span>
+          </div>
         </div>
       </div>
 

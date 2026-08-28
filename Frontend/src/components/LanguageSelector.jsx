@@ -67,7 +67,19 @@ export default function LanguageSelector() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [selected, setSelected] = useState(LANGUAGES[0]);
+
+  // Lazy initializer — reads localStorage synchronously on first render
+  // so the button shows the saved language immediately (no "English" flash)
+  const [selected, setSelected] = useState(() => {
+    try {
+      const savedCode = localStorage.getItem("saalu_selected_lang");
+      if (savedCode) {
+        const lang = LANGUAGES.find((l) => l.code === savedCode);
+        if (lang) return lang;
+      }
+    } catch (e) {}
+    return LANGUAGES[0];
+  });
   const containerRef = useRef(null);
   const searchInputRef = useRef(null);
 
