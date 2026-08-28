@@ -15,6 +15,11 @@ export function applyLanguage(langCode, retriesLeft = 15) {
   const langObj = LANGUAGES.find((l) => l.code === langCode);
   const targetCode = langObj?.translateCode || langCode;
 
+  // Set or clear the googtrans cookie immediately across all domain scopes
+  if (typeof window.setGoogTransCookie === "function") {
+    window.setGoogTransCookie(targetCode);
+  }
+
   if (typeof window.triggerGoogleTranslate === "function") {
     const ok = window.triggerGoogleTranslate(langCode);
     if (ok) return;
@@ -174,17 +179,9 @@ export default function LanguageSelector() {
   const handleSelect = useCallback((lang) => {
     setSelected(lang);
     setOpen(false);
-    const prevLang = localStorage.getItem("saalu_selected_lang") || "en";
     localStorage.setItem("saalu_selected_lang", lang.code);
     window.dispatchEvent(new CustomEvent("saalu_language_changed", { detail: lang.code }));
     applyLanguage(lang.code);
-
-    // Refresh page once if language changes so entire site DOM translates 100% completely
-    if (prevLang !== lang.code) {
-      setTimeout(() => {
-        window.location.reload();
-      }, 120);
-    }
   }, []);
 
   return (

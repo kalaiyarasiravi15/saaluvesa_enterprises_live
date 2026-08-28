@@ -74,30 +74,42 @@
     <div id="google_translate_element"></div>
 
     <script>
+      window.clearGoogleTranslateCookie = function() {
+        var expiry = 'expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; ' + expiry + '; path=/';
+        document.cookie = 'googtrans=; ' + expiry + '; path=/; domain=' + location.hostname;
+        var hostParts = location.hostname.split('.');
+        if (hostParts.length > 2) {
+          var rootDomain = '.' + hostParts.slice(-2).join('.');
+          document.cookie = 'googtrans=; ' + expiry + '; path=/; domain=' + rootDomain;
+        }
+      };
+
+      window.setGoogTransCookie = function(langCode) {
+        if (!langCode || langCode === 'en') {
+          window.clearGoogleTranslateCookie();
+          return;
+        }
+        var val = '/en/' + langCode;
+        document.cookie = 'googtrans=' + val + '; path=/';
+        document.cookie = 'googtrans=' + val + '; path=/; domain=' + location.hostname;
+        var hostParts = location.hostname.split('.');
+        if (hostParts.length > 2) {
+          var rootDomain = '.' + hostParts.slice(-2).join('.');
+          document.cookie = 'googtrans=' + val + '; path=/; domain=' + rootDomain;
+        }
+      };
+
       (function () {
-        function clearGoogleTranslateCookie() {
-          var expiry = 'expires=Thu, 01 Jan 1970 00:00:00 UTC';
-          document.cookie = 'googtrans=; ' + expiry + '; path=/;';
-          document.cookie = 'googtrans=; ' + expiry + '; domain=' + location.hostname + '; path=/;';
-        }
-
-        function setGoogTransCookie(langCode) {
-          var val = '/en/' + langCode;
-          document.cookie = 'googtrans=' + val + '; path=/';
-          document.cookie = 'googtrans=' + val + '; domain=' + location.hostname + '; path=/';
-        }
-
         // If user previously selected a language, restore the googtrans cookie BEFORE
         // Google Translate widget initialises so it starts in the right language.
         var savedLang = '';
         try { savedLang = localStorage.getItem('saalu_selected_lang') || ''; } catch(e) {}
 
         if (savedLang && savedLang !== 'en') {
-          setGoogTransCookie(savedLang);
+          window.setGoogTransCookie(savedLang);
         } else {
-          // No saved language – clear any stale Google Translate cookie so the page
-          // always starts in the site's source language (English).
-          clearGoogleTranslateCookie();
+          window.clearGoogleTranslateCookie();
         }
 
         function hideBanner(node) {
