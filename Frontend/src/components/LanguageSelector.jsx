@@ -195,7 +195,8 @@ export default function LanguageSelector() {
     >
       <button
         type="button"
-        className="lang-selector__trigger"
+        className="lang-selector__trigger notranslate"
+        translate="no"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={`Language: ${selected.label}. Click to change language.`}
@@ -213,7 +214,7 @@ export default function LanguageSelector() {
           <path d="M1.5 7.5h17M1.5 12.5h17" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
 
-        <span className="lang-selector__label">{selected.native}</span>
+        <span className="lang-selector__label notranslate" translate="no">{selected.native}</span>
 
         <svg
           className="lang-selector__chevron"

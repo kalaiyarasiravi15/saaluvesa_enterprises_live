@@ -9,16 +9,16 @@ export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="wrap site-footer__grid">
-        {/* Column 1: Brand & Trust Badge */}
+        {/* Column 1: Brand & Registration */}
         <div className="site-footer__brand">
-          <div className="site-footer__brand-row">
+          <div className="site-footer__brand-row notranslate" translate="no">
             <img className="brand__logo" src={logo} alt="Saaluvesa" />
-            <span className="brand__text">
+            <span className="brand__text notranslate" translate="no">
               SAALU<span>VESA</span>
             </span>
           </div>
           <p className="site-footer__brand-desc">
-            Saaluvesa Enterprises Private Limited — Premier custom apparel manufacturing, textile production, and global export solutions.
+            <strong className="notranslate" translate="no">Saaluvesa Enterprises Private Limited</strong> — Premier custom apparel manufacturing, textile production, and global export solutions.
           </p>
           <div className="site-footer__trust-badge">
             <span className="trust-badge__dot" />
@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Column 2: Navigation */}
+        {/* Column 2: Navigate */}
         <div className="site-footer__col">
           <h4>Navigate</h4>
           <a href="/#home">Home</a>
@@ -35,9 +35,9 @@ export default function Footer() {
           <Link to="/contact">Contact Us</Link>
         </div>
 
-        {/* Column 3: Order & Sourcing Inquiries */}
+        {/* Column 3: Order */}
         <div className="site-footer__col">
-          <h4>Order & Inquiries</h4>
+          <h4>Order</h4>
           <a
             href="https://castbull.co.in"
             target="_blank"
@@ -49,7 +49,7 @@ export default function Footer() {
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
             </svg>
-            <span>castbull.co.in</span>
+            <span className="notranslate" translate="no">castbull.co.in</span>
           </a>
 
           <a href="mailto:contact@saaluvesa.com" className="site-footer__contact-item">
@@ -57,23 +57,31 @@ export default function Footer() {
               <rect width="20" height="16" x="2" y="4" rx="2" />
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
             </svg>
-            <span>contact@saaluvesa.com</span>
+            <span className="notranslate" translate="no">contact@saaluvesa.com</span>
           </a>
 
           <a href="tel:+919488410884" className="site-footer__contact-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="footer-icon">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
-            <span>+91 94884 10884</span>
+            <span className="notranslate" translate="no">+91 94884 10884</span>
           </a>
+        </div>
 
+        {/* Column 4: Sourcing */}
+        <div className="site-footer__col">
+          <h4>Sourcing</h4>
           <div className="site-footer__hours">
             <span className="hours-label">Sourcing Support</span>
             <span className="hours-val">Mon – Sat: 9:00 AM – 7:00 PM IST</span>
           </div>
+          <div className="site-footer__exports">
+            <span className="exports-label">Global Exports</span>
+            <span className="exports-val">USA, Europe, UAE, Australia &amp; Worldwide</span>
+          </div>
         </div>
 
-        {/* Column 4: Registered Office & Export Destinations */}
+        {/* Column 5: Registered Office */}
         <div className="site-footer__col">
           <h4>Registered Office</h4>
           <div className="site-footer__address">
@@ -89,21 +97,17 @@ export default function Footer() {
               Erode, Tamil Nadu – 638459, India
             </p>
           </div>
-          <div className="site-footer__exports">
-            <span className="exports-label">Global Exports</span>
-            <span className="exports-val">USA, Europe, UAE, Australia &amp; Worldwide</span>
-          </div>
         </div>
       </div>
 
       <div className="wrap site-footer__bottom">
         <span className="site-footer__copy">
-          Copyright &copy; {year} Saaluvesa Enterprises Private Limited.
+          Copyright &copy; {year} <span className="notranslate" translate="no">Saaluvesa Enterprises Private Limited</span>.
         </span>
         <span className="site-footer__dev">
           Developed by{" "}
           <strong>
-            <a href="https://saitechnosolutions.com/" target="_blank" rel="noopener noreferrer">
+            <a href="https://saitechnosolutions.com/" target="_blank" rel="noopener noreferrer" className="notranslate" translate="no">
               Sai Techno Solutions
             </a>
           </strong>

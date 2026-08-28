@@ -1,5 +1,5 @@
 /* =====================================================
-   SITE FOOTER — clean, left-aligned, no word-stretch
+   SITE FOOTER — 5 Columns, Full .wrap Width Alignment
    ===================================================== */
 
 .site-footer {
@@ -20,13 +20,14 @@
   word-break: normal !important;
 }
 
-/* ── Grid ── */
+/* ── 5-Column Grid spanning full container width ── */
 .site-footer__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.9fr) minmax(0, 1.15fr) minmax(0, 1.3fr);
-  gap: 28px 32px;
-  max-width: 1160px;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.85fr) minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, 1.35fr);
+  gap: 28px 24px;
+  max-width: var(--container);
   margin: 0 auto;
+  padding: 0 clamp(16px, 3.5vw, 40px);
   padding-bottom: clamp(28px, 3.5vw, 40px);
   border-bottom: 1px solid var(--color-line);
   position: relative;
@@ -67,9 +68,8 @@
 .site-footer__brand-desc {
   margin-top: 12px;
   color: var(--color-ink-soft);
-  font-size: 0.86rem;
-  line-height: 1.6;
-  max-width: 30ch;
+  font-size: 0.84rem;
+  line-height: 1.55;
 }
 
 .site-footer__trust-badge {
@@ -110,13 +110,13 @@
   font-weight: 700;
 }
 
-/* Plain navigation links */
+/* Navigation links */
 .site-footer__col > a,
 .site-footer__col > a:visited {
   display: block;
   color: var(--color-ink-soft);
   font-size: 0.875rem;
-  line-height: 1;
+  line-height: 1.4;
   padding: 4px 0;
   transition: color 0.2s var(--ease);
 }
@@ -134,7 +134,7 @@
   display: block;
 }
 
-/* ── Castbull store link ── */
+/* ── Castbull link ── */
 .site-footer__castbull-link {
   display: inline-flex !important;
   align-items: center;
@@ -150,7 +150,7 @@
   color: var(--color-mint-dim) !important;
 }
 
-/* ── Email / Phone contact items ── */
+/* ── Contact items ── */
 .site-footer__contact-item {
   display: flex !important;
   align-items: center;
@@ -165,10 +165,10 @@
   color: var(--color-navy);
 }
 
-/* ── Sourcing Hours ── */
+/* ── Sourcing & Hours ── */
 .site-footer__hours {
-  margin-top: 12px !important;
-  padding: 0 !important;
+  margin-top: 0;
+  padding: 0;
 }
 
 .site-footer__hours .hours-label {
@@ -188,29 +188,9 @@
   line-height: 1.4;
 }
 
-/* ── Registered Office address ── */
-.site-footer__address {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 0;
-}
-
-.footer-icon--location {
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-
-.site-footer__address p {
-  margin: 0;
-  font-size: 0.86rem;
-  line-height: 1.6;
-  color: var(--color-ink-soft);
-}
-
-/* ── Global Exports note ── */
+/* ── Global Exports ── */
 .site-footer__exports {
-  margin-top: 12px !important;
+  margin-top: 14px !important;
   padding: 0 !important;
 }
 
@@ -231,6 +211,26 @@
   line-height: 1.4;
 }
 
+/* ── Address ── */
+.site-footer__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0;
+}
+
+.footer-icon--location {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.site-footer__address p {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--color-ink-soft);
+}
+
 /* ── Bottom bar ── */
 .site-footer__bottom {
   display: flex;
@@ -238,9 +238,9 @@
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  max-width: 1160px;
+  max-width: var(--container);
   margin: 0 auto;
-  padding: 20px 0 24px;
+  padding: 20px clamp(16px, 3.5vw, 40px) 24px;
   font-size: 0.85rem;
   color: var(--color-ink-soft);
   position: relative;
@@ -272,33 +272,18 @@
 }
 
 /* =====================================================
-   RESPONSIVE
+   RESPONSIVE BREAKPOINTS
    ===================================================== */
 
-/* iPad / Tablet (769–1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .site-footer {
-    padding-top: clamp(36px, 5vw, 48px);
-  }
-
+/* Large Tablet (769px–1100px) — 3 Columns */
+@media (max-width: 1100px) {
   .site-footer__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 32px 36px;
-    padding-bottom: 36px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px 28px;
   }
-
-  .site-footer__bottom {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    padding: 22px 0 28px;
-    font-size: 0.82rem;
-  }
-
-  .site-footer__copy { flex: 1 1 auto; min-width: 0; }
-  .site-footer__dev  { flex-shrink: 0; white-space: nowrap; }
 }
 
-/* Tablet (≤768px) — 2 columns */
+/* Small Tablet (541px–768px) — 2 Columns */
 @media (max-width: 768px) {
   .site-footer {
     padding-top: 40px;
@@ -314,12 +299,12 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
-    padding: 18px 0 22px;
+    padding: 18px 20px 22px;
     font-size: 0.82rem;
   }
 }
 
-/* Mobile (≤540px) — single column, centered */
+/* Mobile (≤540px) — Single Column */
 @media (max-width: 540px) {
   .site-footer {
     padding-top: 32px;
@@ -328,57 +313,25 @@
   .site-footer__grid {
     grid-template-columns: 1fr;
     gap: 22px;
-    padding-bottom: 24px;
+    padding: 0 16px 24px;
   }
 
-  /* On mobile, center brand block */
   .site-footer__brand {
     display: flex;
     flex-direction: column;
-    align-items: center;
-  }
-
-  .site-footer__brand-row {
-    justify-content: center;
-  }
-
-  /* Override the universal left-align ONLY for mobile centering */
-  .site-footer__brand *,
-  .site-footer__brand {
-    text-align: center !important;
-  }
-
-  .site-footer__brand-desc {
-    max-width: 100%;
-  }
-
-  .site-footer__trust-badge {
-    align-self: center;
-  }
-
-  /* Content columns stay left-aligned on mobile */
-  .site-footer__col {
-    display: block;
+    align-items: flex-start;
   }
 
   .site-footer__bottom {
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    padding: 16px 0 20px;
+    padding: 16px 16px 20px;
     font-size: 0.78rem;
   }
 
   .site-footer__bottom,
   .site-footer__bottom * {
     text-align: center !important;
-  }
-}
-
-/* Extra-small (≤380px) */
-@media (max-width: 380px) {
-  .site-footer__bottom {
-    font-size: 0.74rem;
-    padding: 14px 0 18px;
   }
 }

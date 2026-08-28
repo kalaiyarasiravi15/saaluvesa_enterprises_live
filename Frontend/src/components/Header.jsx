@@ -98,9 +98,9 @@ export default function Header() {
     <div className="header-wrapper">
       <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
         <div className="wrap site-header__row">
-          <Link to="/" className="brand" aria-label="Saaluvesa Home" onClick={handleNavigate}>
+          <Link to="/" className="brand notranslate" translate="no" aria-label="Saaluvesa Home" onClick={handleNavigate}>
             <img className="brand__logo" src={logo} alt="Saaluvesa" />
-            <span className="brand__text">
+            <span className="brand__text notranslate" translate="no">
               SAALU<span>VESA</span>
             </span>
           </Link>

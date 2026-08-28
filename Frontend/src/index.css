@@ -142,7 +142,7 @@ img:not([class]) {
 }
 
 p {
-  text-align: justify;
+  text-align: left;
 }
 
 a {
