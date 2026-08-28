@@ -2423,6 +2423,9 @@ function convertDocForCurrency(doc, targetCurrency) {
     total_goods_value: totalGoodsValue.toFixed(2),
     tax_amount: taxAmount.toFixed(2),
     tax2_amount: tax2Amount.toFixed(2),
+    final_total_amount: finalTotalAmount.toFixed(2),
+    total_amount_words: String(finalTotalAmount.toFixed(2)),
+    items: convertedItems,
   };
 }
 
