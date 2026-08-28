@@ -1,0 +1,309 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+:root {
+  /* Brand */
+  --color-navy: #07105b;
+  --color-navy-deep: #050a3c;
+  --color-navy-soft: #141b6e;
+  --color-mint: #79f6c2;
+  --color-mint-soft: #c9fbe6;
+  --color-mint-dim: #3fcf9a;
+
+  /* Neutrals */
+  --color-ivory: #f5f7f4;
+  --color-ivory-deep: #eaeee7;
+  --color-white: #ffffff;
+  --color-ink: #0b0f2b;
+  --color-ink-soft: rgba(11, 15, 43, 0.68);
+  --color-line: rgba(7, 16, 91, 0.12);
+  --color-line-on-navy: rgba(121, 246, 194, 0.25);
+
+  /* Type */
+  --font-display: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Scale */
+  --fs-hero: clamp(1.85rem, 4.2vw, 3.8rem);
+  --fs-h2: clamp(1.5rem, 2.8vw, 2.5rem);
+  --fs-h3: clamp(1.1rem, 1.8vw, 1.35rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-eyebrow: clamp(0.7rem, 0.95vw, 0.82rem);
+
+  /* Layout */
+  --container: 1400px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --gap-section: clamp(44px, 6.5vw, 96px);
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 960px) {
+  html {
+    scroll-padding-top: 76px;
+  }
+}
+
+@media (max-width: 540px) {
+  html {
+    scroll-padding-top: 62px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-ivory);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── Google Translate toolbar suppression ──────────────────────────────
+   Hides the top banner iframe and hover tooltip without disrupting
+   background translation worker frames.
+   ─────────────────────────────────────────────────────────────────────── */
+
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+iframe[id=":1.container"],
+iframe[id=":2.container"],
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-te-ftab-float {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0px !important;
+  max-height: 0px !important;
+  min-height: 0px !important;
+  position: fixed !important;
+  top: -99999px !important;
+  left: -99999px !important;
+  border: none !important;
+  pointer-events: none !important;
+  z-index: -999999 !important;
+}
+
+/* Prevent body/html top-shift Google applies */
+html {
+  top: 0px !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+html.translated-ltr,
+html.translated-rtl,
+body.translated-ltr,
+body.translated-rtl {
+  top: 0px !important;
+  margin-top: 0px !important;
+  padding-top: 0px !important;
+}
+
+
+
+
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  display: block;
+}
+
+img:not([class]) {
+  height: auto;
+}
+
+p {
+  text-align: justify;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  max-width: 100%;
+}
+
+.wrap {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3.5vw, 40px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0 16px;
+  }
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-mint-dim);
+  outline-offset: 3px;
+}
+
+/* Shared buttons ---------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.94rem;
+  padding: 13px 26px;
+  min-height: 46px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  transition: transform 0.25s var(--ease), background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  white-space: nowrap;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn--mint {
+  background: var(--color-mint);
+  color: var(--color-navy-deep);
+}
+
+.btn--mint:hover {
+  background: var(--color-mint-soft);
+}
+
+.btn--outline-light {
+  border-color: var(--color-line-on-navy);
+  color: var(--color-mint-soft);
+  background: transparent;
+}
+
+.btn--outline-light:hover {
+  border-color: var(--color-mint);
+  background: rgba(121, 246, 194, 0.08);
+  color: var(--color-white);
+}
+
+.btn--outline-dark {
+  border-color: var(--color-line);
+  color: var(--color-navy);
+  background: transparent;
+}
+
+.btn--outline-dark:hover {
+  border-color: var(--color-navy);
+  background: rgba(7, 16, 91, 0.04);
+}
+
+.btn--pill {
+  padding: 9px 20px;
+  min-height: 40px;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 480px) {
+  .btn {
+    padding: 11px 20px;
+    font-size: 0.88rem;
+    min-height: 44px;
+  }
+  .btn--pill {
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    min-height: 38px;
+  }
+}
+
+/* Signature: running-stitch divider */
+.stitch-line {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.stitch-line span {
+  display: block;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Logs
+*.log
+**/logs/
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

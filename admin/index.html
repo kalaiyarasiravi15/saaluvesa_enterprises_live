@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
+    <title class="notranslate" translate="no">Saaluvesa Admin</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpeg" />
+    <meta name="description" content="Saaluvesa Enterprises — management console" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Completely hide ONLY the Google Translate top banner frame & hover tooltip */
+      .goog-te-banner-frame,
+      .goog-te-banner-frame.skiptranslate,
+      iframe.goog-te-banner-frame,
+      iframe[id=":1.container"],
+      iframe[id=":2.container"],
+      #goog-gt-tt,
+      .goog-te-balloon-frame,
+      .goog-te-ftab-float {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0px !important;
+        max-height: 0px !important;
+        min-height: 0px !important;
+        opacity: 0 !important;
+        position: fixed !important;
+        top: -99999px !important;
+        left: -99999px !important;
+        border: none !important;
+        pointer-events: none !important;
+        z-index: -999999 !important;
+      }
+
+      /* Prevent Google Translate from shifting the layout */
+      html { top: 0px !important; }
+      body { top: 0px !important; position: static !important; }
+      html.translated-ltr,
+      html.translated-rtl,
+      body.translated-ltr,
+      body.translated-rtl {
+        top: 0px !important;
+        margin-top: 0px !important;
+        padding-top: 0px !important;
+      }
+
+      /* Off-screen container for Google Translate widget */
+      #google_translate_element {
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    </style>
+  </head>
+  <body class="notranslate" translate="no">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

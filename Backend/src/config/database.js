@@ -1,0 +1,45 @@
+import { Sequelize } from "sequelize";
+import mysql from "mysql2/promise";
+import dotenv from "dotenv";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config();
+
+export const databaseName = process.env.DB_NAME || "saitechno_aula";
+export const sequelize = new Sequelize(
+  databaseName,
+  process.env.DB_USER ?? "saitechno_aulauser1",
+  process.env.DB_PASSWORD ?? "g8G$FIM0wD",
+  {
+    host: process.env.DB_HOST ?? "localhost",
+    port: Number(process.env.DB_PORT ?? 3306),
+    dialect: "mysql",
+    logging: false,
+  },
+);
+
+// Connect without selecting a schema so a new local installation can boot.
+export async function ensureDatabase() {
+  if (!/^[A-Za-z0-9_]+$/.test(databaseName))
+    throw new Error(
+      "DB_NAME may contain only letters, numbers, and underscores",
+    );
+  try {
+    const connection = await mysql.createConnection({
+      host: process.env.DB_HOST ?? "localhost",
+      port: Number(process.env.DB_PORT ?? 3306),
+      user: process.env.DB_USER ?? "saitechno_aulauser1",
+      password: process.env.DB_PASSWORD ?? "g8G$FIM0wD",
+    });
+    await connection.query(
+      `CREATE DATABASE IF NOT EXISTS \`${databaseName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`,
+    );
+    await connection.end();
+  } catch (err) {
+    // cPanel MySQL user might not have global CREATE DATABASE permission, safe to proceed
+  }
+}

@@ -1,0 +1,217 @@
+import { DataTypes } from "sequelize";
+import { sequelize } from "../config/database.js";
+
+export const AdminUser = sequelize.define(
+  "AdminUser",
+  {
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+      validate: { isEmail: true },
+    },
+    password_hash: { type: DataTypes.STRING, allowNull: false },
+    role: {
+      type: DataTypes.ENUM("admin", "staff"),
+      allowNull: false,
+      defaultValue: "admin",
+    },
+    refresh_token: DataTypes.TEXT,
+  },
+  { tableName: "AdminUsers", freezeTableName: true },
+);
+
+export const Product = sequelize.define(
+  "Product",
+  {
+    name: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.TEXT, allowNull: false },
+    website_link: DataTypes.STRING,
+    image: DataTypes.TEXT,
+    images: { type: DataTypes.TEXT, allowNull: true, defaultValue: null },
+    display_order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+      validate: { min: 0 },
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    slug: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+    },
+  },
+  { tableName: "Products", freezeTableName: true },
+);
+
+export const ContactSubmission = sequelize.define(
+  "ContactSubmission",
+  {
+    name: { type: DataTypes.STRING, allowNull: false },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: { isEmail: true },
+    },
+    address: DataTypes.TEXT,
+    postal_code: DataTypes.STRING,
+    requirement_details: { type: DataTypes.TEXT, allowNull: false },
+    status: { type: DataTypes.ENUM("New", "Responded"), defaultValue: "New" },
+  },
+  { tableName: "ContactSubmissions", freezeTableName: true },
+);
+
+export const Notification = sequelize.define(
+  "Notification",
+  {
+    type: {
+      type: DataTypes.ENUM("contact_submission"),
+      allowNull: false,
+      defaultValue: "contact_submission",
+    },
+    title: { type: DataTypes.STRING, allowNull: false },
+    is_read: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+  },
+  { tableName: "Notifications", freezeTableName: true, updatedAt: false },
+);
+
+export const SiteSetting = sequelize.define(
+  "SiteSetting",
+  {
+    key: { type: DataTypes.STRING, unique: true, allowNull: false },
+    value: { type: DataTypes.TEXT, allowNull: false },
+  },
+  { tableName: "SiteSettings", freezeTableName: true },
+);
+
+export const ExportDocument = sequelize.define(
+  "ExportDocument",
+  {
+    invoice_no: { type: DataTypes.STRING, allowNull: false, unique: true },
+    sender_name: DataTypes.STRING,
+    sender_email: { type: DataTypes.STRING, validate: { isEmail: true } },
+    sender_address: DataTypes.TEXT,
+    additional_company_details: DataTypes.TEXT,
+    sender_contact: DataTypes.STRING,
+    sender_tax_id: DataTypes.STRING,
+    shipment_date: DataTypes.DATEONLY,
+    shipment_ref_no: DataTypes.STRING,
+    reason_for_export: DataTypes.STRING,
+    type_of_export: DataTypes.STRING,
+    export_license_no: DataTypes.STRING,
+    import_license_no: DataTypes.STRING,
+    incoterms: DataTypes.STRING,
+    currency_code: { type: DataTypes.STRING, defaultValue: "USD" },
+    payment_method: DataTypes.STRING,
+    importer_name: { type: DataTypes.STRING, allowNull: false },
+    importer_address: DataTypes.TEXT,
+    importer_contact: DataTypes.STRING,
+    importer_email: { type: DataTypes.STRING, validate: { isEmail: true } },
+    importer_tax_id: DataTypes.STRING,
+    receiver_name: DataTypes.STRING,
+    receiver_email: { type: DataTypes.STRING, validate: { isEmail: true } },
+    receiver_address: DataTypes.TEXT,
+    receiver_contact: DataTypes.STRING,
+    receiver_tax_id: DataTypes.STRING,
+    letter_of_credit_no: DataTypes.STRING,
+    customer_po_no: DataTypes.STRING,
+    po_date: DataTypes.DATEONLY,
+    file_number: DataTypes.STRING,
+    mode_of_transportation: DataTypes.STRING,
+    transportation_terms: DataTypes.STRING,
+    awb_bl_no: DataTypes.STRING,
+    no_of_packages: DataTypes.INTEGER,
+    package_description: DataTypes.TEXT,
+    total_gross_weight_unit: DataTypes.STRING,
+    hs_code: DataTypes.STRING,
+    country_of_origin: DataTypes.STRING,
+    other_information_compliance_details: DataTypes.TEXT,
+    signatory_name: DataTypes.STRING,
+    signatory_designation: DataTypes.STRING,
+    total_goods_value: { type: DataTypes.DECIMAL(14, 2), defaultValue: 0 },
+    tax_type: { type: DataTypes.STRING, defaultValue: null },
+    tax_rate: { type: DataTypes.DECIMAL(6, 2), defaultValue: 0 },
+    tax_amount: { type: DataTypes.DECIMAL(14, 2), defaultValue: 0 },
+    tax2_type: { type: DataTypes.STRING, defaultValue: null },
+    tax2_rate: { type: DataTypes.DECIMAL(6, 2), defaultValue: 0 },
+    tax2_amount: { type: DataTypes.DECIMAL(14, 2), defaultValue: 0 },
+    final_total_amount: { type: DataTypes.DECIMAL(14, 2), defaultValue: 0 },
+    total_amount_words: DataTypes.TEXT,
+    total_net_weight_kg: { type: DataTypes.DECIMAL(14, 3), defaultValue: 0 },
+    total_net_weight_lbs: { type: DataTypes.DECIMAL(14, 3), defaultValue: 0 },
+    status: {
+      type: DataTypes.ENUM("Draft", "Generated", "Closed"),
+      defaultValue: "Draft",
+    },
+  },
+  { tableName: "ExportDocuments", freezeTableName: true },
+);
+
+export const ExportDocumentItem = sequelize.define(
+  "ExportDocumentItem",
+  {
+    hs_code: DataTypes.STRING,
+    product_name: { type: DataTypes.STRING, allowNull: false },
+    country_of_origin: DataTypes.STRING,
+    qty: { type: DataTypes.DECIMAL(12, 3), allowNull: false },
+    uom: DataTypes.STRING,
+    unit_value: { type: DataTypes.DECIMAL(14, 2), allowNull: false },
+    extra_price: { type: DataTypes.DECIMAL(14, 2), defaultValue: 0 },
+    sub_total: {
+      type: DataTypes.DECIMAL(14, 2),
+      allowNull: false,
+      defaultValue: 0,
+    },
+    unit_net_weight: { type: DataTypes.DECIMAL(14, 3), defaultValue: 0 },
+  },
+  { tableName: "ExportDocumentItems", freezeTableName: true },
+);
+export const ExportDocumentAudit = sequelize.define(
+  "ExportDocumentAudit",
+  {
+    edited_field: { type: DataTypes.STRING, allowNull: false },
+    old_value: DataTypes.TEXT,
+    new_value: DataTypes.TEXT,
+    edited_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+  },
+  { tableName: "ExportDocumentAudits", freezeTableName: true, updatedAt: false },
+);
+
+Product.hasMany(ContactSubmission, { foreignKey: "source_product_id", constraints: false });
+ContactSubmission.belongsTo(Product, { foreignKey: "source_product_id", constraints: false });
+ExportDocument.hasMany(ExportDocumentItem, {
+  foreignKey: "export_document_id",
+  as: "items",
+  onDelete: "CASCADE",
+});
+ExportDocumentItem.belongsTo(ExportDocument, {
+  foreignKey: "export_document_id",
+});
+ExportDocument.hasMany(ExportDocumentAudit, {
+  foreignKey: "export_document_id",
+  as: "audits",
+  onDelete: "CASCADE",
+});
+ExportDocumentAudit.belongsTo(ExportDocument, {
+  foreignKey: "export_document_id",
+});
+AdminUser.hasMany(ExportDocumentAudit, { foreignKey: "edited_by" });
+ExportDocumentAudit.belongsTo(AdminUser, {
+  foreignKey: "edited_by",
+  as: "editor",
+});
+Notification.belongsTo(ContactSubmission, {
+  foreignKey: "contact_submission_id",
+  as: "submission",
+  onDelete: "CASCADE",
+  constraints: false,
+});
+ContactSubmission.hasMany(Notification, {
+  foreignKey: "contact_submission_id",
+  constraints: false,
+});
