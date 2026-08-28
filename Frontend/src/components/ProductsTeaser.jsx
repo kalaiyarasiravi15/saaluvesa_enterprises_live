@@ -200,8 +200,8 @@ function ProductCarousel({ products }) {
 
     let width;
     if (count === 1) {
-      // Mobile: show one full card with a small peek of the next one
-      width = containerWidth * 0.88;
+      // Mobile: fill container width so card is centered cleanly without offset gap
+      width = containerWidth;
     } else {
       width = (containerWidth - gap * (count - 1)) / count;
     }

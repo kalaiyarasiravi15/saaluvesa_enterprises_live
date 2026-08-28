@@ -3236,7 +3236,40 @@ function ExportDocuments() {
     return () => clearTimeout(timer);
   }, [viewingHtmlType, selectedDocLanguage]);
 
+const CURRENCY_RATES = {
+  USD: 1.0,
+  INR: 87.0,
+  EUR: 0.92,
+  GBP: 0.78,
+  AED: 3.67,
+  SAR: 3.75,
+  CAD: 1.38,
+  AUD: 1.52,
+  SGD: 1.34,
+  JPY: 155.0,
+  CNY: 7.25,
+};
+
   const handleFieldChange = (key, val) => {
+    if (key === "currency_code" && formState.currency_code !== val) {
+      const oldCurrency = formState.currency_code || "USD";
+      const newCurrency = val;
+      const oldRate = CURRENCY_RATES[oldCurrency] || 1.0;
+      const newRate = CURRENCY_RATES[newCurrency] || 1.0;
+
+      if (oldRate > 0 && newRate > 0) {
+        const ratio = newRate / oldRate;
+        setItems((prevItems) =>
+          prevItems.map((item) => {
+            const rawVal = Number(item.unit_value);
+            if (!item.unit_value || isNaN(rawVal) || rawVal <= 0) return item;
+            const converted = rawVal * ratio;
+            const formattedVal = converted >= 10 ? String(Math.round(converted)) : converted.toFixed(2);
+            return { ...item, unit_value: formattedVal };
+          })
+        );
+      }
+    }
     setFormState((prev) => ({ ...prev, [key]: val }));
   };
 

@@ -451,8 +451,12 @@
   }
 }
 
-/* ── Mobile: 1 card + peek at next (arrow size/position only — width is set by JS) ── */
+/* ── Mobile: 1 card centered cleanly ── */
 @media (max-width: 600px) {
+  .products-carousel__slide {
+    scroll-snap-align: center;
+  }
+
   .products-carousel__arrow {
     width: 36px;
     height: 36px;
@@ -464,10 +468,10 @@
   }
 
   .products-carousel__arrow--left {
-    left: -10px;
+    left: 4px;
   }
 
   .products-carousel__arrow--right {
-    right: -10px;
+    right: 4px;
   }
 }
