@@ -2388,7 +2388,56 @@ function formatDocDate(val, langCode = "en") {
   }
 }
 
-function ExportDocumentPreview({ document, type, langCode = "en" }) {
+function convertDocForCurrency(doc, targetCurrency) {
+  if (!doc) return doc;
+  const sourceCurrency = doc.currency_code || "USD";
+  if (!targetCurrency || sourceCurrency === targetCurrency) return doc;
+
+  const sourceRate = CURRENCY_RATES[sourceCurrency] || 1.0;
+  const targetRate = CURRENCY_RATES[targetCurrency] || 1.0;
+  const ratio = targetRate / sourceRate;
+
+  const convertedItems = (doc.items || []).map((item) => {
+    const rawVal = Number(item.unit_value || 0);
+    const convertedUnitVal = rawVal * ratio;
+    const newUnitVal = convertedUnitVal >= 10 ? Math.round(convertedUnitVal) : Number(convertedUnitVal.toFixed(2));
+    const qty = Number(item.qty || 1);
+    const newSubTotal = (qty * newUnitVal).toFixed(2);
+    return {
+      ...item,
+      unit_value: newUnitVal,
+      sub_total: newSubTotal,
+    };
+  });
+
+  const totalGoodsValue = convertedItems.reduce((acc, it) => acc + Number(it.sub_total || 0), 0);
+  const taxRate = Number(doc.tax_rate || 0);
+  const tax2Rate = Number(doc.tax2_rate || 0);
+  const taxAmount = (totalGoodsValue * taxRate) / 100;
+  const tax2Amount = (totalGoodsValue * tax2Rate) / 100;
+  const finalTotalAmount = totalGoodsValue + taxAmount + tax2Amount;
+
+  return {
+    ...doc,
+    currency_code: targetCurrency,
+    total_goods_value: totalGoodsValue.toFixed(2),
+    tax_amount: taxAmount.toFixed(2),
+    tax2_amount: tax2Amount.toFixed(2),
+  };
+}
+
+export function getCurrencyForLangCode(langCode, docCurrency = "USD") {
+  const code = (langCode || "").toLowerCase().split("-")[0];
+  const euroLangs = ["de", "fr", "es", "it", "nl", "pt", "el", "sv", "da", "fi", "cs", "ro", "hu", "pl"];
+  if (euroLangs.includes(code)) return "EUR";
+  if (code === "ar") return "AED";
+  if (code === "hi" || code === "ta") return "INR";
+  return docCurrency || "USD";
+}
+
+function ExportDocumentPreview({ document: rawDocument, type, langCode = "en", targetCurrency }) {
+  const activeCurrency = targetCurrency || getCurrencyForLangCode(langCode, rawDocument?.currency_code);
+  const document = activeCurrency ? convertDocForCurrency(rawDocument, activeCurrency) : rawDocument;
   const isPacking = type === "packing";
   const t = getDocTranslation(langCode);
   const tr = (val) => translateDocValue(val, langCode);
