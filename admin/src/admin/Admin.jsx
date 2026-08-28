@@ -2388,6 +2388,20 @@ function formatDocDate(val, langCode = "en") {
   }
 }
 
+const CURRENCY_RATES = {
+  USD: 1.0,
+  INR: 87.0,
+  EUR: 0.92,
+  GBP: 0.78,
+  AED: 3.67,
+  SAR: 3.75,
+  CAD: 1.38,
+  AUD: 1.52,
+  SGD: 1.34,
+  JPY: 155.0,
+  CNY: 7.25,
+};
+
 function convertDocForCurrency(doc, targetCurrency) {
   if (!doc) return doc;
   const sourceCurrency = doc.currency_code || "USD";
@@ -3287,20 +3301,6 @@ function ExportDocuments() {
 
     return () => clearTimeout(timer);
   }, [viewingHtmlType, selectedDocLanguage]);
-
-const CURRENCY_RATES = {
-  USD: 1.0,
-  INR: 87.0,
-  EUR: 0.92,
-  GBP: 0.78,
-  AED: 3.67,
-  SAR: 3.75,
-  CAD: 1.38,
-  AUD: 1.52,
-  SGD: 1.34,
-  JPY: 155.0,
-  CNY: 7.25,
-};
 
   const handleFieldChange = (key, val) => {
     if (key === "currency_code" && formState.currency_code !== val) {
