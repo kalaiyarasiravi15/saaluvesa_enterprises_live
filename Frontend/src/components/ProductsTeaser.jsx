@@ -333,7 +333,18 @@ function ProductCarousel({ products }) {
 export default function ProductsTeaser() {
   // null = loading, [] = no products, [...] = loaded
   const [products, setProducts] = useState(null);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth <= 960 : false
+  );
   const animRef = useScrollAnimation(0.12, "0px 0px -8% 0px", products);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileOrTablet(window.innerWidth <= 960);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -402,6 +413,8 @@ export default function ProductsTeaser() {
   // API returned empty list — hide the section so the next section moves up
   if (products.length === 0) return null;
 
+  const showCarousel = isMobileOrTablet || products.length > 3;
+
   return (
     <section id="products" className="products-teaser" ref={animRef}>
       <div className="wrap">
@@ -412,12 +425,15 @@ export default function ProductsTeaser() {
           </div>
         </div>
 
-        {/* Responsive grid — all products shown at once, 3-col desktop, 2 tablet, 1 mobile */}
-        <div className="products-teaser__grid">
-          {products.map((p, i) => (
-            <ProductCard key={p.id} p={p} i={i} />
-          ))}
-        </div>
+        {showCarousel ? (
+          <ProductCarousel products={products} />
+        ) : (
+          <div className="products-teaser__grid">
+            {products.map((p, i) => (
+              <ProductCard key={p.id} p={p} i={i} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

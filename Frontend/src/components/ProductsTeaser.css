@@ -445,38 +445,53 @@
   transform: none;
 }
 
-/* ── Tablet: 2 cards visible (arrow position only — width is set by JS) ── */
+/* ── Tablet: 2 cards visible ── */
 @media (max-width: 960px) {
   .products-carousel__arrow--left {
-    left: -16px;
+    left: -12px;
   }
 
   .products-carousel__arrow--right {
-    right: -16px;
+    right: -12px;
   }
 }
 
-/* ── Mobile: 1 card centered cleanly ── */
+/* ── Mobile: 1 card centered cleanly with high-contrast arrows ── */
 @media (max-width: 600px) {
+  .products-carousel {
+    padding: 0 4px;
+  }
+
   .products-carousel__slide {
     scroll-snap-align: center;
   }
 
   .products-carousel__arrow {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+    background: rgba(5, 10, 60, 0.95);
+    border: 1.5px solid var(--color-mint);
+    color: var(--color-mint);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 
   .products-carousel__arrow svg {
-    width: 17px;
-    height: 17px;
+    width: 18px;
+    height: 18px;
   }
 
   .products-carousel__arrow--left {
-    left: 4px;
+    left: 2px;
   }
 
   .products-carousel__arrow--right {
-    right: 4px;
+    right: 2px;
+  }
+
+  .products-carousel__dots {
+    margin-top: 16px;
+    gap: 6px;
   }
 }
