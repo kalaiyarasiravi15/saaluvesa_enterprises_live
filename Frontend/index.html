@@ -77,22 +77,22 @@
       window.clearGoogleTranslateCookie = function() {
         var host = location.hostname;
         var hostParts = host.split('.');
+        var paths = ['/'];
         var domains = ['', host, '.' + host];
         if (hostParts.length > 2) {
           var rootDomain = hostParts.slice(-2).join('.');
           domains.push(rootDomain);
           domains.push('.' + rootDomain);
         }
-        var paths = ['/', location.pathname];
         var expiry = 'expires=Thu, 01 Jan 1970 00:00:00 UTC; Max-Age=0';
 
         for (var i = 0; i < domains.length; i++) {
           for (var j = 0; j < paths.length; j++) {
             var dom = domains[i] ? '; domain=' + domains[i] : '';
             document.cookie = 'googtrans=; ' + expiry + '; path=' + paths[j] + dom;
-            document.cookie = 'googtrans=/en/en; path=' + paths[j] + dom;
           }
         }
+        document.cookie = 'googtrans=; ' + expiry;
       };
 
       window.setGoogTransCookie = function(langCode) {
@@ -100,6 +100,7 @@
           window.clearGoogleTranslateCookie();
           return;
         }
+        window.clearGoogleTranslateCookie();
         var val = '/en/' + langCode;
         var host = location.hostname;
         var hostParts = host.split('.');
@@ -109,14 +110,12 @@
           domains.push(rootDomain);
           domains.push('.' + rootDomain);
         }
-        var paths = ['/'];
 
         for (var i = 0; i < domains.length; i++) {
-          for (var j = 0; j < paths.length; j++) {
-            var dom = domains[i] ? '; domain=' + domains[i] : '';
-            document.cookie = 'googtrans=' + val + '; path=' + paths[j] + dom;
-          }
+          var dom = domains[i] ? '; domain=' + domains[i] : '';
+          document.cookie = 'googtrans=' + val + '; path=/; ' + dom;
         }
+        document.cookie = 'googtrans=' + val + '; path=/';
       };
 
       (function () {
