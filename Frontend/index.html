@@ -81,9 +81,24 @@
           document.cookie = 'googtrans=; ' + expiry + '; domain=' + location.hostname + '; path=/;';
         }
 
-        // Each visit must begin in the site's source language. Google Translate
-        // otherwise restores its own googtrans cookie before React has rendered.
-        clearGoogleTranslateCookie();
+        function setGoogTransCookie(langCode) {
+          var val = '/en/' + langCode;
+          document.cookie = 'googtrans=' + val + '; path=/';
+          document.cookie = 'googtrans=' + val + '; domain=' + location.hostname + '; path=/';
+        }
+
+        // If user previously selected a language, restore the googtrans cookie BEFORE
+        // Google Translate widget initialises so it starts in the right language.
+        var savedLang = '';
+        try { savedLang = localStorage.getItem('saalu_selected_lang') || ''; } catch(e) {}
+
+        if (savedLang && savedLang !== 'en') {
+          setGoogTransCookie(savedLang);
+        } else {
+          // No saved language – clear any stale Google Translate cookie so the page
+          // always starts in the site's source language (English).
+          clearGoogleTranslateCookie();
+        }
 
         function hideBanner(node) {
           if (node && node.nodeType === 1) {
@@ -131,6 +146,24 @@
           },
           'google_translate_element'
         );
+
+        // After the widget initialises, if a language was saved, trigger it again
+        // via the combo select so every page element gets translated.
+        var lang = '';
+        try { lang = localStorage.getItem('saalu_selected_lang') || ''; } catch(e) {}
+        if (lang && lang !== 'en') {
+          var attempts = 0;
+          var applyInterval = setInterval(function() {
+            var sel = document.querySelector('.goog-te-combo');
+            if (sel && sel.options && sel.options.length > 1) {
+              sel.value = lang;
+              sel.dispatchEvent(new Event('change', { bubbles: true }));
+              clearInterval(applyInterval);
+            } else if (++attempts > 30) {
+              clearInterval(applyInterval);
+            }
+          }, 200);
+        }
       }
 
       window.triggerGoogleTranslate = function (langCode) {
