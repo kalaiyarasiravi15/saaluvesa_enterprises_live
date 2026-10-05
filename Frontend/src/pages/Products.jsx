@@ -19,11 +19,11 @@ export default function Products() {
       <PageBanner
         bgImage={productsBannerBg}
         title="Products"
-        subtitle="Apparel & Beyond — Built for Global Export"
+        subtitle="Built for Global Export"
       />
 
-      {/* Existing Products section reused directly */}
-      <ProductsTeaser />
+      {/* Full responsive grid showing ALL products */}
+      <ProductsTeaser showAll={true} />
 
       {/* How It Works process section */}
       <ProductsProcess />

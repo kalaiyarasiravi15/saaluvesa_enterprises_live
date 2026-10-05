@@ -1,145 +1,151 @@
+/**
+ * LanguageSelector  v3.0
+ *
+ * Architecture:
+ *  - localStorage('saalu_selected_lang') = single source of truth for app code
+ *  - applyLanguage() is the one place that writes cookies + triggers GT
+ *  - On mount: restore state from localStorage, then tell GT to translate
+ *  - On select: save to localStorage, set cookie, trigger GT live
+ *  - On English: clear cookie + reload (only reliable way to un-translate GT)
+ */
+
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { LANGUAGES, EUROPE_COUNTRIES } from "../data/languages.js";
+import { LANGUAGES, EUROPE_COUNTRIES, getTranslateCode } from "../data/languages.js";
 import "./LanguageSelector.css";
 
-export { LANGUAGES, EUROPE_COUNTRIES };
+// Re-export so other modules can import from this single file
+export { LANGUAGES, EUROPE_COUNTRIES, getTranslateCode };
 
-let activeLanguageCode = "en";
+// Module-level tracker — keeps React components and plain JS in sync
+let _activeCode = "en";
 
 export function getActiveLanguageCode() {
-  return activeLanguageCode;
+  return _activeCode;
 }
 
-export function applyLanguage(langCode, retriesLeft = 15) {
-  activeLanguageCode = langCode;
-  const langObj = LANGUAGES.find((l) => l.code === langCode);
-  const targetCode = langObj?.translateCode || langCode;
+// ─── Safe localStorage helpers ────────────────────────────────────────────────
+function lsGet(key) {
+  try { return localStorage.getItem(key) || ""; } catch (_) { return ""; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, val); } catch (_) {}
+}
 
-  // Set or clear the googtrans cookie immediately across all domain scopes
-  if (typeof window.setGoogTransCookie === "function") {
-    window.setGoogTransCookie(targetCode);
+// ─── applyLanguage ────────────────────────────────────────────────────────────
+/**
+ * Tell Google Translate to switch to `langCode`.
+ * 1. Update module tracker
+ * 2. Set / clear the googtrans cookie (so refresh works)
+ * 3. Attempt to update the hidden .goog-te-combo directly
+ * 4. If combo not ready yet, retry up to `retriesLeft` times (150 ms apart)
+ */
+export function applyLanguage(langCode, retriesLeft = 20) {
+  _activeCode = langCode || "en";
+  const tc = getTranslateCode(langCode);
+
+  // Step 2 – sync cookie with new language
+  if (tc === "en") {
+    if (typeof window.clearGoogleTranslateCookie === "function") {
+      window.clearGoogleTranslateCookie();
+    }
+  } else {
+    if (typeof window.setGoogTransCookie === "function") {
+      window.setGoogTransCookie(tc); // setGoogTransCookie already calls gtCode() internally
+    }
   }
 
+  // Step 3 – try updating the combo directly via the global helper
   if (typeof window.triggerGoogleTranslate === "function") {
     const ok = window.triggerGoogleTranslate(langCode);
-    if (ok) return;
+    if (ok) return; // success — done
   }
 
-  const select = document.querySelector(".goog-te-combo");
-  if (select && select.options && select.options.length > 0) {
-    let targetIndex = -1;
-    for (let i = 0; i < select.options.length; i++) {
-      const opt = select.options[i];
-      if (targetCode === "en" || langCode === "en") {
-        if (
-          opt.value === "" ||
-          opt.value === "en" ||
-          opt.text.toLowerCase().includes("select") ||
-          opt.text.toLowerCase().includes("english")
-        ) {
-          targetIndex = i;
-          break;
-        }
-      } else {
-        if (
-          opt.value.toLowerCase() === targetCode.toLowerCase() ||
-          opt.value.toLowerCase() === langCode.toLowerCase()
-        ) {
-          targetIndex = i;
-          break;
-        }
-      }
-    }
-
-    if (targetIndex !== -1) {
-      select.selectedIndex = targetIndex;
-      select.value = select.options[targetIndex].value;
-      select.options[targetIndex].selected = true;
-    } else {
-      select.value = targetCode === "en" ? "" : targetCode;
-    }
-
-    select.dispatchEvent(new Event("change", { bubbles: true }));
-    return;
-  }
-
+  // Step 4 – GT widget not ready yet; retry
   if (retriesLeft > 0) {
     setTimeout(() => applyLanguage(langCode, retriesLeft - 1), 150);
+  } else {
+    console.warn("[Saalu] applyLanguage: GT combo never became ready for", langCode);
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// React component
+// ─────────────────────────────────────────────────────────────────────────────
 export default function LanguageSelector() {
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [open, setOpen]                   = useState(false);
+  const [search, setSearch]               = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
 
-  // Lazy initializer — reads localStorage synchronously on first render
-  // so the button shows the saved language immediately (no "English" flash)
+  // Read from localStorage synchronously on first render (no flash)
   const [selected, setSelected] = useState(() => {
-    try {
-      const savedCode = localStorage.getItem("saalu_selected_lang");
-      if (savedCode) {
-        const lang = LANGUAGES.find((l) => l.code === savedCode);
-        if (lang) return lang;
-      }
-    } catch (e) {}
-    return LANGUAGES[0];
+    const saved = lsGet("saalu_selected_lang");
+    return LANGUAGES.find((l) => l.code === saved) || LANGUAGES[0];
   });
-  const containerRef = useRef(null);
+
+  const containerRef   = useRef(null);
   const searchInputRef = useRef(null);
 
-  // Sync state if language changes elsewhere
+  // ── On mount: apply saved language to GT (GT may not have loaded yet,
+  //    so applyLanguage's retry loop handles the wait) ───────────────────────
   useEffect(() => {
-    const handleLangChange = (e) => {
+    const saved = lsGet("saalu_selected_lang");
+    if (saved && saved !== "en") {
+      const lang = LANGUAGES.find((l) => l.code === saved);
+      if (lang) {
+        setSelected(lang);
+        _activeCode = saved;
+        applyLanguage(saved);
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Cross-instance sync (two LanguageSelector instances in DOM) ───────────
+  useEffect(() => {
+    const onLangChange = (e) => {
       const code = e.detail || "en";
       const lang = LANGUAGES.find((l) => l.code === code) || LANGUAGES[0];
       setSelected(lang);
     };
-
-    window.addEventListener("saalu_language_changed", handleLangChange);
-    return () => window.removeEventListener("saalu_language_changed", handleLangChange);
+    window.addEventListener("saalu_language_changed", onLangChange);
+    return () => window.removeEventListener("saalu_language_changed", onLangChange);
   }, []);
 
-  // Focus search input on open, clear search on close
+  // ── Focus / close helpers ─────────────────────────────────────────────────
   useEffect(() => {
     if (open) {
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 50);
+      setTimeout(() => searchInputRef.current?.focus(), 50);
     } else {
       setSearch("");
+      setSelectedCountry("");
     }
   }, [open]);
 
-  // Close on outside click
   useEffect(() => {
-    const handler = (e) => {
+    const onMouseDown = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
   }, []);
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return;
-    const handler = (e) => {
+    const onKey = (e) => {
       if (e.key === "Escape") {
         setOpen(false);
         containerRef.current?.querySelector(".lang-selector__trigger")?.focus();
       }
     };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // Filter languages by selected country and search term
+  // ── Filter ────────────────────────────────────────────────────────────────
   const filteredLanguages = useMemo(() => {
     let list = LANGUAGES;
 
-    // Filter by Country if a specific country is selected
     if (selectedCountry) {
       const countryObj = EUROPE_COUNTRIES.find((c) => c.country === selectedCountry);
       if (countryObj) {
@@ -152,63 +158,60 @@ export default function LanguageSelector() {
     const q = search.trim().toLowerCase();
     if (!q) return list;
 
-    return list.filter((lang) => {
-      const matchLabel = lang.label.toLowerCase().includes(q);
-      const matchNative = lang.native.toLowerCase().includes(q);
-      const matchCode = lang.code.toLowerCase().includes(q);
-      const matchCountry = (lang.countries || []).some((c) =>
-        c.toLowerCase().includes(q)
-      );
-      return matchLabel || matchNative || matchCode || matchCountry;
-    });
+    return list.filter((lang) =>
+      lang.label.toLowerCase().includes(q) ||
+      lang.native.toLowerCase().includes(q) ||
+      lang.code.toLowerCase().includes(q) ||
+      (lang.countries || []).some((c) => c.toLowerCase().includes(q))
+    );
   }, [search, selectedCountry]);
 
-  // On mount, restore saved language from localStorage
-  useEffect(() => {
-    const savedCode = localStorage.getItem("saalu_selected_lang");
-    if (savedCode) {
-      const lang = LANGUAGES.find((l) => l.code === savedCode);
-      if (lang) {
-        setSelected(lang);
-        applyLanguage(savedCode);
-      }
-    }
-  }, []);
-
-  // Handle language selection
+  // ── Select a language ─────────────────────────────────────────────────────
   const handleSelect = useCallback((lang) => {
+    const prevCode = lsGet("saalu_selected_lang") || "en";
+    const newCode  = lang.code;
+
+    // Update UI state immediately
     setSelected(lang);
     setOpen(false);
-    const prevLang = localStorage.getItem("saalu_selected_lang") || "en";
-    localStorage.setItem("saalu_selected_lang", lang.code);
-    window.dispatchEvent(new CustomEvent("saalu_language_changed", { detail: lang.code }));
 
-    if (lang.code === "en") {
-      // Switching to English -> wipe all target cookies, set /en/en, apply & reload if coming from foreign lang
+    // Persist selection
+    lsSet("saalu_selected_lang", newCode);
+    _activeCode = newCode;
+
+    // Broadcast so the other LanguageSelector instance (mobile/desktop) updates
+    window.dispatchEvent(new CustomEvent("saalu_language_changed", { detail: newCode }));
+
+    if (newCode === "en") {
+      // Restore English:
+      //   - Clear the cookie
+      //   - Reload the page (most reliable way to remove Google Translate's DOM transforms)
       if (typeof window.clearGoogleTranslateCookie === "function") {
         window.clearGoogleTranslateCookie();
       }
-      applyLanguage("en");
-      if (prevLang !== "en") {
-        setTimeout(() => {
-          window.location.reload();
-        }, 100);
+      if (prevCode !== "en") {
+        // Small delay so the cookie write completes before reload
+        setTimeout(() => window.location.reload(), 80);
       }
     } else {
-      // Switching to a foreign language -> set cookie & apply live
+      // Foreign language: set cookie + trigger GT live
       if (typeof window.setGoogTransCookie === "function") {
-        window.setGoogTransCookie(lang.code);
+        window.setGoogTransCookie(newCode);
       }
-      applyLanguage(lang.code);
+      applyLanguage(newCode);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // Render
+  // ─────────────────────────────────────────────────────────────────────────
   return (
     <div
       className={`lang-selector notranslate${open ? " lang-selector--open" : ""}`}
       ref={containerRef}
       translate="no"
     >
+      {/* Trigger button */}
       <button
         type="button"
         className="lang-selector__trigger notranslate"
@@ -219,49 +222,30 @@ export default function LanguageSelector() {
         onClick={() => setOpen((v) => !v)}
         title="Select language"
       >
-        <svg
-          className="lang-selector__globe"
-          viewBox="0 0 20 20"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg className="lang-selector__globe" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeWidth="1.4" />
           <ellipse cx="10" cy="10" rx="3.5" ry="8.5" stroke="currentColor" strokeWidth="1.4" />
           <path d="M1.5 7.5h17M1.5 12.5h17" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
         </svg>
-
         <span className="lang-selector__label notranslate" translate="no">{selected.native}</span>
-
-        <svg
-          className="lang-selector__chevron"
-          viewBox="0 0 10 6"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M1 1l4 4 4-4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+        <svg className="lang-selector__chevron" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
 
+      {/* Dropdown */}
       {open && (
         <div className="lang-selector__dropdown">
-          {/* Country Quick Filter */}
+
+          {/* Country quick-filter */}
           <div className="lang-selector__country-box">
             <select
               className="lang-selector__country-select"
               value={selectedCountry}
-              onChange={(e) => {
-                setSelectedCountry(e.target.value);
-                setSearch("");
-              }}
+              onChange={(e) => { setSelectedCountry(e.target.value); setSearch(""); }}
               aria-label="Filter by Country"
             >
-              <option value="">All European Countries ({EUROPE_COUNTRIES.length})</option>
+              <option value="">All Countries ({EUROPE_COUNTRIES.length})</option>
               {EUROPE_COUNTRIES.map((c) => (
                 <option key={c.country} value={c.country}>
                   {c.country} ({c.languages.length} lang{c.languages.length > 1 ? "s" : ""})
@@ -270,27 +254,19 @@ export default function LanguageSelector() {
             </select>
           </div>
 
-          {/* Search box */}
+          {/* Search */}
           <div className="lang-selector__search-box">
-            <svg
-              className="lang-selector__search-icon"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
+            <svg className="lang-selector__search-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path
                 d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
               />
             </svg>
             <input
               ref={searchInputRef}
               type="text"
               className="lang-selector__search-input"
-              placeholder="Search country or language (e.g. Spain, Français...)"
+              placeholder="Search language or country (e.g. Tamil, Hindi, Spain…)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onClick={(e) => e.stopPropagation()}
@@ -306,24 +282,14 @@ export default function LanguageSelector() {
               <button
                 type="button"
                 className="lang-selector__search-clear"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSearch("");
-                  searchInputRef.current?.focus();
-                }}
+                onClick={(e) => { e.stopPropagation(); setSearch(""); searchInputRef.current?.focus(); }}
                 aria-label="Clear search"
-              >
-                ✕
-              </button>
+              >✕</button>
             )}
           </div>
 
           {/* Language list */}
-          <ul
-            className="lang-selector__list"
-            role="listbox"
-            aria-label="Language options"
-          >
+          <ul className="lang-selector__list" role="listbox" aria-label="Language options">
             {filteredLanguages.length > 0 ? (
               filteredLanguages.map((lang) => (
                 <li
@@ -332,12 +298,7 @@ export default function LanguageSelector() {
                   aria-selected={selected.code === lang.code}
                   className={`lang-selector__option${selected.code === lang.code ? " is-active" : ""}`}
                   onClick={() => handleSelect(lang)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleSelect(lang);
-                    }
-                  }}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleSelect(lang); } }}
                   tabIndex={0}
                 >
                   <span className="lang-selector__option-text">
@@ -351,19 +312,8 @@ export default function LanguageSelector() {
                     )}
                   </span>
                   {selected.code === lang.code && (
-                    <svg
-                      className="lang-selector__check"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M3.5 8.5L6.5 11.5L12.5 4.5"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
+                    <svg className="lang-selector__check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M3.5 8.5L6.5 11.5L12.5 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   )}
                 </li>

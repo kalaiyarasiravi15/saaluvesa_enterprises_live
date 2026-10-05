@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 export async function api(path, options = {}) {
   const token = localStorage.getItem('saaluvesa_access_token');
   const response = await fetch(`${API_URL}${path}`, {

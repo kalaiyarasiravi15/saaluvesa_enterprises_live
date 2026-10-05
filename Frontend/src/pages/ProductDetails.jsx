@@ -4,8 +4,10 @@ import "./ProductDetails.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ContactSection from "../components/ContactSection";
-import { PRODUCT_CATALOG } from "../data/products";
 import { api, assetUrl } from "../lib/api";
+
+const PLACEHOLDER_IMAGE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%239ca3af'%3ENo Image Available%3C/text%3E%3C/svg%3E";
 
 function ArrowIcon() {
   return (
@@ -24,16 +26,8 @@ export default function ProductDetails() {
     productId = id || "";
   }
 
-  const catalogProduct =
-    PRODUCT_CATALOG.find(
-      (item) =>
-        item.id === productId ||
-        item.id.toLowerCase() === productId.toLowerCase() ||
-        item.name.toLowerCase() === productId.toLowerCase(),
-    ) || null;
-
   const [apiProduct, setApiProduct] = useState(null);
-  const [allProducts, setAllProducts] = useState(PRODUCT_CATALOG);
+  const [allProducts, setAllProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [notFound, setNotFound] = useState(false);
@@ -53,27 +47,27 @@ export default function ProductDetails() {
       if (!isMounted) return;
 
       let foundFromList = null;
-      if (listResult.status === "fulfilled" && Array.isArray(listResult.value) && listResult.value.length > 0) {
+      if (
+        listResult.status === "fulfilled" &&
+        Array.isArray(listResult.value) &&
+        listResult.value.length > 0
+      ) {
         const mapped = listResult.value.map((p) => {
-          const staticMatch = PRODUCT_CATALOG.find(
-            (item) =>
-              item.id === p.slug ||
-              String(item.id) === String(p.id) ||
-              item.name?.toLowerCase() === p.name?.toLowerCase(),
-          );
-          const images = Array.isArray(p.images) && p.images.length
-            ? p.images.map((img) => assetUrl(img) || img).filter(Boolean)
-            : p.image
-            ? [assetUrl(p.image) || p.image].filter(Boolean)
-            : staticMatch?.images || [PRODUCT_CATALOG[0].images[0]];
+          const images =
+            Array.isArray(p.images) && p.images.length
+              ? p.images.map((img) => assetUrl(img) || img).filter(Boolean)
+              : p.image
+              ? [assetUrl(p.image) || p.image].filter(Boolean)
+              : [];
 
           return {
             id: p.slug || String(p.id),
             rawId: p.id,
             slug: p.slug,
             name: p.name,
-            category: staticMatch?.category || "Apparel Sector",
-            description: p.description,
+            category:
+              p.category && p.category !== "Apparel Sector" ? p.category : "",
+            description: p.description || "",
             images,
           };
         });
@@ -83,8 +77,11 @@ export default function ProductDetails() {
           (p) =>
             String(p.id) === String(productId) ||
             String(p.slug || "").toLowerCase() === productId.toLowerCase() ||
-            String(p.name || "").trim().toLowerCase() === productId.trim().toLowerCase(),
+            String(p.name || "").trim().toLowerCase() ===
+              productId.trim().toLowerCase()
         );
+      } else {
+        setAllProducts([]);
       }
 
       if (detailResult.status === "fulfilled" && detailResult.value) {
@@ -95,8 +92,14 @@ export default function ProductDetails() {
         setIsLoading(false);
       } else {
         const error = detailResult.reason;
-        if (error?.message === "Product not found" && !catalogProduct) setNotFound(true);
-        else if (!catalogProduct) setLoadError(true);
+        if (
+          error?.message === "Product not found" ||
+          detailResult.status === "rejected"
+        ) {
+          setNotFound(true);
+        } else {
+          setLoadError(true);
+        }
         setIsLoading(false);
       }
     });
@@ -104,58 +107,44 @@ export default function ProductDetails() {
     return () => {
       isMounted = false;
     };
-  }, [catalogProduct, productId, retryKey]);
-
-  const matchedCatalog =
-    catalogProduct ||
-    (apiProduct
-      ? PRODUCT_CATALOG.find(
-          (item) =>
-            item.id === apiProduct.slug ||
-            item.name.toLowerCase() === apiProduct.name?.toLowerCase(),
-        )
-      : null);
+  }, [productId, retryKey]);
 
   const product = (() => {
-    if (notFound && !matchedCatalog && !apiProduct) return null;
+    if (notFound && !apiProduct) return null;
 
     if (apiProduct) {
-      const apiImages = Array.isArray(apiProduct.images) && apiProduct.images.length
-        ? apiProduct.images.map((img) => assetUrl(img) || img).filter(Boolean)
-        : apiProduct.image
-        ? [assetUrl(apiProduct.image)].filter(Boolean)
-        : matchedCatalog?.images || [PRODUCT_CATALOG[0].images[0]];
+      const apiImages =
+        Array.isArray(apiProduct.images) && apiProduct.images.length
+          ? apiProduct.images
+              .map((img) => assetUrl(img) || img)
+              .filter(Boolean)
+          : apiProduct.image
+          ? [assetUrl(apiProduct.image)].filter(Boolean)
+          : [];
 
       return {
-        ...(matchedCatalog || {}),
         id: apiProduct.slug || String(apiProduct.id),
         rawId: apiProduct.id,
         slug: apiProduct.slug,
-        name: apiProduct.name || matchedCatalog?.name || "Product",
-        category: matchedCatalog?.category || "Apparel Sector",
-        tagline: matchedCatalog?.tagline || "High-quality custom apparel, manufactured for global export.",
-        aboutHeading: matchedCatalog?.aboutHeading || "Crafted for Performance, Scale, and Comfort.",
-        shortDescription: apiProduct.description || matchedCatalog?.shortDescription || "",
-        description: apiProduct.description || matchedCatalog?.description || "",
-        features: matchedCatalog?.features || [
-          "Premium export-grade cotton & fabric blends",
-          "High-definition, wash-durable printing & stitching",
-          "Flexible order volumes from sampling to bulk containers",
-          "Dedicated quality inspection prior to packaging",
-          "Worldwide tracked dispatch & door-to-door delivery",
-        ],
-        customizations: matchedCatalog?.customizations || [
-          { title: "Print Method", options: ["DTF", "DTG", "Screen Printing", "Embroidery"] },
-          { title: "Fabric Options", options: ["100% Cotton", "Cotton Blend", "Heavy Weight"] },
-          { title: "Sizing", options: ["XS – 5XL", "Kids Sizes", "Custom Fit"] },
-          { title: "Order Quantities", options: ["Single Piece", "Small Batch", "Bulk / Wholesale"] },
-        ],
-        images: apiImages.length > 0 ? apiImages : [PRODUCT_CATALOG[0].images[0]],
-        website_link: apiProduct.website_link || matchedCatalog?.website_link || "https://castbull.co.in/",
+        name: apiProduct.name || "Product",
+        category:
+          apiProduct.category && apiProduct.category !== "Apparel Sector"
+            ? apiProduct.category
+            : "",
+        tagline:
+          apiProduct.tagline ||
+          "High-quality products, manufactured and sourced for global export.",
+        aboutHeading:
+          apiProduct.aboutHeading ||
+          "Crafted for Performance, Scale, and Comfort.",
+        shortDescription: apiProduct.description || "",
+        description: apiProduct.description || "",
+        images: apiImages.length > 0 ? apiImages : [PLACEHOLDER_IMAGE],
+        website_link:
+          apiProduct.website_link || "https://castbull.co.in/",
       };
     }
 
-    if (matchedCatalog) return matchedCatalog;
     return null;
   })();
 
@@ -183,10 +172,16 @@ export default function ProductDetails() {
             Something went wrong while fetching the product details. Please try again.
           </p>
           <div className="details-not-found__actions">
-            <button type="button" className="btn btn--mint" onClick={() => setRetryKey((k) => k + 1)}>
+            <button
+              type="button"
+              className="btn btn--mint"
+              onClick={() => setRetryKey((k) => k + 1)}
+            >
               Try again
             </button>
-            <Link className="btn btn--outline-light" to="/products">Back to products</Link>
+            <Link className="btn btn--outline-light" to="/products">
+              Back to products
+            </Link>
           </div>
         </main>
         <Footer />
@@ -201,7 +196,9 @@ export default function ProductDetails() {
         <main className="details-not-found">
           <p className="eyebrow">Product Catalogue</p>
           <h1>That product is not available.</h1>
-          <Link className="btn btn--mint" to="/products">Back to products</Link>
+          <Link className="btn btn--mint" to="/products">
+            Back to products
+          </Link>
         </main>
         <Footer />
       </div>
@@ -211,17 +208,23 @@ export default function ProductDetails() {
   // Related products selection:
   // Strictly excludes the current product, and picks the next available products sequentially.
   const related = (() => {
-    const list = allProducts && allProducts.length > 0 ? allProducts : PRODUCT_CATALOG;
+    const list = Array.isArray(allProducts) ? allProducts : [];
+    if (!product || !list.length) return [];
 
     const isCurrentProduct = (item) => {
       if (!item) return false;
       const sameId =
-        (product.id && String(item.id).toLowerCase() === String(product.id).toLowerCase()) ||
-        (product.slug && String(item.slug || "").toLowerCase() === String(product.slug).toLowerCase()) ||
+        (product.id &&
+          String(item.id).toLowerCase() === String(product.id).toLowerCase()) ||
+        (product.slug &&
+          String(item.slug || "").toLowerCase() ===
+            String(product.slug).toLowerCase()) ||
         (product.rawId && String(item.rawId || "") === String(product.rawId)) ||
         (product.id && String(item.rawId || "") === String(product.id));
       const sameName =
-        item.name && product.name && item.name.trim().toLowerCase() === product.name.trim().toLowerCase();
+        item.name &&
+        product.name &&
+        item.name.trim().toLowerCase() === product.name.trim().toLowerCase();
       return Boolean(sameId || sameName);
     };
 
@@ -229,16 +232,21 @@ export default function ProductDetails() {
 
     const candidates = [];
     if (currentIndex !== -1) {
-      // Cycle through next items in order starting right after currentIndex
       for (let i = 1; i < list.length; i++) {
         const candidate = list[(currentIndex + i) % list.length];
-        if (!isCurrentProduct(candidate) && !candidates.some((c) => String(c.id) === String(candidate.id))) {
+        if (
+          !isCurrentProduct(candidate) &&
+          !candidates.some((c) => String(c.id) === String(candidate.id))
+        ) {
           candidates.push(candidate);
         }
       }
     } else {
       for (const item of list) {
-        if (!isCurrentProduct(item) && !candidates.some((c) => String(c.id) === String(item.id))) {
+        if (
+          !isCurrentProduct(item) &&
+          !candidates.some((c) => String(c.id) === String(item.id))
+        ) {
           candidates.push(item);
         }
       }
@@ -248,8 +256,7 @@ export default function ProductDetails() {
   })();
 
   const activeImage =
-    (product.images && product.images[0]) ||
-    PRODUCT_CATALOG[0].images[0];
+    (product.images && product.images[0]) || PLACEHOLDER_IMAGE;
 
   return (
     <div className="product-details-page">
@@ -272,12 +279,9 @@ export default function ProductDetails() {
                   src={activeImage}
                   alt={product.name}
                   onError={(e) => {
-                    const fallback =
-                      matchedCatalog?.images?.[0] ||
-                      PRODUCT_CATALOG[0].images[0];
-                    if (e.currentTarget.src !== fallback) {
+                    if (e.currentTarget.src !== PLACEHOLDER_IMAGE) {
                       e.currentTarget.onerror = null;
-                      e.currentTarget.src = fallback;
+                      e.currentTarget.src = PLACEHOLDER_IMAGE;
                     }
                   }}
                 />
@@ -293,7 +297,7 @@ export default function ProductDetails() {
                     to="/contact"
                     className="btn btn--mint details-summary__button"
                   >
-                    Order Apparels
+                    Order
                   </Link>
                 ) : (
                   <a
@@ -302,7 +306,7 @@ export default function ProductDetails() {
                     rel="noopener noreferrer"
                     className="btn btn--mint details-summary__button"
                   >
-                    Order Apparels
+                    Order
                   </a>
                 )}
               </div>
@@ -328,15 +332,16 @@ export default function ProductDetails() {
                   >
                     <div className="details-related-card__image">
                       <img
-                        src={(item.images && item.images[0]) || item.image || PRODUCT_CATALOG[0].images[0]}
+                        src={
+                          (item.images && item.images[0]) ||
+                          item.image ||
+                          PLACEHOLDER_IMAGE
+                        }
                         alt={item.name}
                         onError={(e) => {
-                          const fallback =
-                            PRODUCT_CATALOG.find((c) => c.id === item.id)?.images?.[0] ||
-                            PRODUCT_CATALOG[0].images[0];
-                          if (e.currentTarget.src !== fallback) {
+                          if (e.currentTarget.src !== PLACEHOLDER_IMAGE) {
                             e.currentTarget.onerror = null;
-                            e.currentTarget.src = fallback;
+                            e.currentTarget.src = PLACEHOLDER_IMAGE;
                           }
                         }}
                       />
@@ -344,7 +349,9 @@ export default function ProductDetails() {
                     <div className="details-related-card__body">
                       <p>{item.category}</p>
                       <h3>{item.name}</h3>
-                      <span>View details <ArrowIcon /></span>
+                      <span>
+                        View details <ArrowIcon />
+                      </span>
                     </div>
                   </Link>
                 ))}

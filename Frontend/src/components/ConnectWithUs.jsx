@@ -14,12 +14,11 @@ export default function ConnectWithUs() {
           <h2>
             Expanding Opportunities
             <br />
-            Beyond Custom Apparel.
+            for Global Export.
           </h2>
           <p>
-            In addition to apparel, we are also open to the export of any product as per
-            your submitted requirements. We ensure reliable sourcing, verification, and
-            delivery to meet all your business, custom printing, and private label branding requirements.
+            We are open to the export of any product as per your submitted requirements.
+            We ensure reliable sourcing, verification, and delivery to meet all your business requirements.
           </p>
           <Link to="/products" className="btn btn--mint">
             View Our Products
@@ -29,7 +28,7 @@ export default function ConnectWithUs() {
         <div className="connect__box" data-animate="card">
           <h3>Partner With Us Globally</h3>
           <p>
-            Partner with us to bring your vision to life, whether in textiles or any other
+            Partner with us to bring your vision to life across diverse
             export opportunities. Let’s explore how we can serve your needs globally.
           </p>
 

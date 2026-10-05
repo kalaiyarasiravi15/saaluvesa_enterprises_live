@@ -39,17 +39,12 @@ const STEPS = [
   {
     icon: "file-text",
     title: "Share Your Requirement",
-    body: "Send your product type, quantity, sizes, colors, and print design — or let us suggest options.",
-  },
-  {
-    icon: "sparkles",
-    title: "Design & Approval",
-    body: "We prepare a mockup with sample choices and refine it until you fully approve.",
+    body: "Send your product type, quantity, specifications, and target market — or let us assist you.",
   },
   {
     icon: "shield-check",
-    title: "Production & Quality Check",
-    body: "Printing and stitching with multi-stage quality inspection before anything gets packed.",
+    title: "Sourcing & Quality Check",
+    body: "Rigorous verification and multi-stage quality inspection before anything gets packed.",
   },
   {
     icon: "package",
@@ -68,8 +63,7 @@ export default function ProductsProcess() {
           <div className="eyebrow products-process__eyebrow">How It Works</div>
           <h2>From Requirement to Doorstep.</h2>
           <p>
-            A simple, transparent ordering flow built around custom-printed T-shirts and apparel
-            export — from your first message to final delivery.
+            A simple, transparent ordering flow for global export — from your first message to final delivery.
           </p>
         </div>
 

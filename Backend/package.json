@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js",
+    "build": "node --check src/server.js",
+    "start": "node server.js",
     "db:sync": "node src/scripts/sync.js",
     "db:seed-products": "node src/scripts/seed-products.js"
   },

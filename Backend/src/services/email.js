@@ -2,12 +2,13 @@ import nodemailer from "nodemailer";
 import "dotenv/config";
 
 const smtpUser = String(process.env.SMTP_USER || "").trim();
-const smtpPassword = String(process.env.SMTP_PASSWORD || "").trim();
+const smtpPassword = String(process.env.SMTP_PASSWORD || "").replace(/\s+/g, "").trim();
+const smtpPort = Number(process.env.SMTP_PORT || 465);
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT || 587),
-  secure: process.env.SMTP_SECURE === "true",
+  host: process.env.SMTP_HOST || "smtp.gmail.com",
+  port: smtpPort,
+  secure: process.env.SMTP_SECURE === "true" || smtpPort === 465,
   auth:
     smtpUser && smtpPassword
       ? { user: smtpUser, pass: smtpPassword }

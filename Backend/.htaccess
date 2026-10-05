@@ -1,0 +1,2 @@
+# CORS is configured by Express from CORS_ORIGIN in the Node application.
+# Do not set Access-Control-Allow-Origin here; duplicate headers break browsers.

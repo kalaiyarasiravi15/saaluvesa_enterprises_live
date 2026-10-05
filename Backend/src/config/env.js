@@ -7,3 +7,8 @@ const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({
   path: path.resolve(currentDirectory, "../../.env"),
 });
+dotenv.config({
+  path: path.resolve(currentDirectory, "../../.env"),
+  override: false,
+});
+

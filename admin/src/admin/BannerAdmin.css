@@ -1,0 +1,243 @@
+/* ============================================================
+   BANNER ADMIN STYLES
+   ============================================================ */
+
+.banner-admin-page {
+  display: grid;
+  gap: 24px;
+}
+
+/* ── Form Inputs Override ─────────────────────────────────── */
+.banner-admin-form .admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.banner-admin-form .admin-field input,
+.banner-admin-form .admin-field textarea,
+.banner-admin-form .admin-field select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid rgba(7, 16, 91, 0.16);
+  border-radius: 12px;
+  background: var(--admin-white, #ffffff);
+  color: var(--admin-ink, #0b0f2b);
+  font-family: var(--admin-font-body, "Poppins", sans-serif);
+  font-size: 0.92rem;
+  box-sizing: border-box;
+  transition: border-color 0.18s var(--admin-ease), box-shadow 0.18s var(--admin-ease), background 0.18s var(--admin-ease);
+}
+
+.banner-admin-form .admin-field input:focus,
+.banner-admin-form .admin-field textarea:focus,
+.banner-admin-form .admin-field select:focus {
+  outline: none;
+  border-color: var(--admin-navy, #07105b);
+  box-shadow: 0 0 0 3px rgba(7, 16, 91, 0.12);
+}
+
+.banner-admin-form textarea {
+  resize: vertical;
+  min-height: 84px;
+  line-height: 1.55;
+}
+
+/* ── Field Label Row with Character Count ─────────────────── */
+.banner-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.banner-field-label {
+  color: var(--admin-navy, #07105b);
+  font-family: var(--admin-font-body, "Poppins", sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-req-star {
+  color: #e5484d;
+  font-weight: 700;
+}
+
+.banner-char-counter {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--admin-ink-soft, rgba(11, 15, 43, 0.68));
+  background: var(--admin-ivory, #f5f7f4);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--admin-line, rgba(7, 16, 91, 0.12));
+  letter-spacing: 0.2px;
+}
+.banner-char-counter--warn {
+  color: #b45309;
+  background: #fef3c7;
+  border-color: #fde68a;
+}
+.banner-char-counter--limit {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+/* ── Error state ─────────────────────────────────────────── */
+.banner-input--error {
+  border-color: #e5484d !important;
+  background-color: rgba(229, 72, 77, 0.02) !important;
+  box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.12) !important;
+}
+
+.banner-error-msg {
+  color: #e5484d;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ── Links Management Section ─────────────────────────────── */
+.banner-links-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--admin-line, rgba(7, 16, 91, 0.12));
+}
+
+.banner-links-list {
+  display: grid;
+  gap: 16px;
+}
+
+.banner-link-card {
+  background: var(--admin-ivory, #f5f7f4);
+  border: 1.5px solid var(--admin-line, rgba(7, 16, 91, 0.12));
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+  transition: border-color 0.18s;
+}
+
+.banner-link-card:focus-within {
+  border-color: var(--admin-navy, #07105b);
+}
+
+.banner-link-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.banner-link-badge {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background: var(--admin-navy, #07105b);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.banner-link-grid {
+  display: grid;
+  grid-template-columns: 200px 1.4fr 1.2fr;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .banner-link-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Live Mini Preview ────────────────────────────────────── */
+.banner-preview-card {
+  background: radial-gradient(50% 60% at 85% 15%, rgba(121, 246, 194, 0.15), transparent 70%),
+              linear-gradient(105deg, rgba(5, 10, 60, 0.96) 0%, rgba(5, 10, 60, 0.90) 45%, rgba(7, 16, 91, 0.80) 100%),
+              #050a3c;
+  color: white;
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(121, 246, 194, 0.25);
+  box-shadow: 0 16px 40px rgba(7, 16, 91, 0.28);
+}
+
+.banner-preview-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--admin-mint, #79f6c2);
+  margin-bottom: 8px;
+}
+
+.banner-preview-headline {
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 10px;
+  color: white;
+}
+
+.banner-preview-highlight {
+  color: var(--admin-mint, #79f6c2);
+}
+
+.banner-preview-sub {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 18px;
+  max-width: 680px;
+}
+
+.banner-preview-notice {
+  background: rgba(7, 16, 91, 0.75);
+  border: 1px solid rgba(121, 246, 194, 0.3);
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 680px;
+}
+
+.banner-preview-notice-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(121, 246, 194, 0.15);
+  display: grid;
+  place-items: center;
+  color: var(--admin-mint, #79f6c2);
+  flex-shrink: 0;
+}
+
+.banner-preview-links {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.banner-preview-link-item {
+  color: var(--admin-mint, #79f6c2);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

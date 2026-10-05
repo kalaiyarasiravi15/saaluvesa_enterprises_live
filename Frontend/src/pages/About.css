@@ -628,3 +628,47 @@
     padding: 22px 18px;
   }
 }
+
+/* ---------- Partner With Us Section ---------- */
+.about-partner-card {
+  background: var(--color-white);
+  border: 1px solid rgba(7, 16, 91, 0.12);
+  box-shadow: 0 16px 44px rgba(7, 16, 91, 0.08);
+  border-radius: var(--radius-md);
+  padding: clamp(32px, 4.5vw, 48px) clamp(24px, 4vw, 42px);
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-partner-card h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  color: #07105b;
+  margin: 0 0 16px;
+}
+
+.about-partner-card p {
+  color: var(--color-ink-soft);
+  line-height: 1.75;
+  font-size: clamp(0.96rem, 1.1vw, 1.05rem);
+  margin: 0 0 14px;
+}
+
+.about-partner-card .about-partner-tagline {
+  font-weight: 600;
+  color: #07105b;
+  margin-top: 10px;
+  margin-bottom: 28px;
+  font-size: clamp(1rem, 1.15vw, 1.12rem);
+}
+
+.about-partner-card .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+}

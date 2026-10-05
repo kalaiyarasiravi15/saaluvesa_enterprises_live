@@ -5,11 +5,11 @@ import useScrollAnimation from "../hooks/useScrollAnimation";
 const VALUES = [
   {
     title: "Quality",
-    body: "Strict quality control and premium standards for plain and custom-printed apparel orders.",
+    body: "Strict quality control and premium standards for all export orders.",
   },
   {
     title: "Reliability",
-    body: "End-to-end verification and dependable sourcing for textiles and diverse export products.",
+    body: "End-to-end verification and dependable sourcing for diverse export products.",
   },
   {
     title: "Export-Ready",

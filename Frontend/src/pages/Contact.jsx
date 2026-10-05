@@ -11,7 +11,7 @@ import contactBannerBg from "../assets/whatwedo_exports.jpg";
 export default function Contact() {
   const animRef = useScrollAnimation();
   const mapAddressQuery = encodeURIComponent(
-    "Dr.No.18/76, Thiru.Ve.Ka. St, Punjai Puliampatti, Sathyamangalam, Erode, Tamil Nadu 638459"
+    "Saaluvesa Enterprises Private Limited, Punjai Puliampatti, Sathyamangalam, Erode, Tamil Nadu 638459"
   );
   const mapEmbedUrl = `https://maps.google.com/maps?q=${mapAddressQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 

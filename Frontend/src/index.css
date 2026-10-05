@@ -141,8 +141,21 @@ img:not([class]) {
   height: auto;
 }
 
-p {
-  text-align: left;
+p,
+.about-overview p,
+.about-section__head p,
+.about-vm-card p,
+.about-why-card p,
+.about-partner-card p,
+.hero__sub,
+.product-card p,
+.product-details p,
+.products-process p,
+.products-process-step p,
+.contact-section p,
+.value-strip p {
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 a {

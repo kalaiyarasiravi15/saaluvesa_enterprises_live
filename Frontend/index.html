@@ -13,7 +13,7 @@
     />
 
     <style>
-      /* Completely hide ONLY the Google Translate top banner frame & hover tooltip */
+      /* Completely hide the Google Translate banner/toolbar */
       .goog-te-banner-frame,
       .goog-te-banner-frame.skiptranslate,
       iframe.goog-te-banner-frame,
@@ -36,24 +36,17 @@
         z-index: -999999 !important;
       }
 
-      /* Prevent Google Translate from shifting the layout */
-      html {
-        top: 0px !important;
-      }
-      body {
-        top: 0px !important;
-        position: static !important;
-      }
-      html.translated-ltr,
-      html.translated-rtl,
-      body.translated-ltr,
-      body.translated-rtl {
+      /* Prevent Google Translate from shifting body down */
+      html { top: 0px !important; }
+      body { top: 0px !important; position: static !important; }
+      html.translated-ltr, html.translated-rtl,
+      body.translated-ltr, body.translated-rtl {
         top: 0px !important;
         margin-top: 0px !important;
         padding-top: 0px !important;
       }
 
-      /* Off-screen container for Google Translate widget */
+      /* Hide the Google Translate widget container */
       #google_translate_element {
         position: absolute !important;
         top: -9999px !important;
@@ -74,171 +67,226 @@
     <div id="google_translate_element"></div>
 
     <script>
-      window.clearGoogleTranslateCookie = function() {
-        var host = location.hostname;
-        var hostParts = host.split('.');
-        var paths = ['/'];
-        var domains = ['', host, '.' + host];
-        if (hostParts.length > 2) {
-          var rootDomain = hostParts.slice(-2).join('.');
-          domains.push(rootDomain);
-          domains.push('.' + rootDomain);
-        }
-        var expiry = 'expires=Thu, 01 Jan 1970 00:00:00 UTC; Max-Age=0';
+      // ─────────────────────────────────────────────────────────────────────────
+      // SAALUVESA TRANSLATION ENGINE  v3.0
+      // Single source of truth: localStorage('saalu_selected_lang')
+      // googtrans cookie is always derived FROM localStorage, never the reverse.
+      // ─────────────────────────────────────────────────────────────────────────
 
-        for (var i = 0; i < domains.length; i++) {
-          for (var j = 0; j < paths.length; j++) {
-            var dom = domains[i] ? '; domain=' + domains[i] : '';
-            document.cookie = 'googtrans=; ' + expiry + '; path=' + paths[j] + dom;
-          }
-        }
-        document.cookie = 'googtrans=; ' + expiry;
+      // Verified Google Translate code map for dialect/regional codes
+      var GT_CODE_MAP = {
+        'ca-valencia': 'ca',   // Valencian → Catalan (closest supported)
+        'cnr':         'sr',   // Montenegrin → Serbian (closest supported)
+        'nn':          'no',   // Norwegian Nynorsk → Norwegian Bokmål
+        'se':          'no',   // Northern Sami → Norwegian (closest supported)
+        'rm':          'it',   // Romansh → Italian (closest supported; 'rm' not in GT)
       };
 
-      window.setGoogTransCookie = function(langCode) {
-        if (!langCode || langCode === 'en') {
+      // Resolve app language code → verified Google Translate code
+      function gtCode(code) {
+        if (!code || code === 'en') return 'en';
+        return GT_CODE_MAP[code] || code;
+      }
+
+      // ── Cookie helpers ────────────────────────────────────────────────────────
+      // Get all possible domain variations for reliable cookie deletion
+      function _cookieDomains() {
+        var host = location.hostname;
+        var parts = host.split('.');
+        var list = ['', host];
+        if (host !== 'localhost') list.push('.' + host);
+        if (parts.length > 2) {
+          var root = parts.slice(-2).join('.');
+          list.push(root, '.' + root);
+        }
+        return list;
+      }
+
+      // Wipe ALL variants of the googtrans cookie
+      window.clearGoogleTranslateCookie = function () {
+        var exp = 'expires=Thu, 01 Jan 1970 00:00:00 UTC; max-age=0; path=/';
+        _cookieDomains().forEach(function (d) {
+          var dom = d ? '; domain=' + d : '';
+          document.cookie = 'googtrans=; ' + exp + dom;
+          document.cookie = 'googtrans=; ' + exp + dom + '; path=/ ';
+        });
+        // Also clear without any domain attribute
+        document.cookie = 'googtrans=; ' + exp;
+      };
+
+      // Set googtrans cookie to /en/<targetCode> across all domain scopes
+      window.setGoogTransCookie = function (langCode) {
+        var tc = gtCode(langCode);
+        if (!tc || tc === 'en') {
           window.clearGoogleTranslateCookie();
           return;
         }
-        window.clearGoogleTranslateCookie();
-        var val = '/en/' + langCode;
-        var host = location.hostname;
-        var hostParts = host.split('.');
-        var domains = ['', host, '.' + host];
-        if (hostParts.length > 2) {
-          var rootDomain = hostParts.slice(-2).join('.');
-          domains.push(rootDomain);
-          domains.push('.' + rootDomain);
-        }
-
-        for (var i = 0; i < domains.length; i++) {
-          var dom = domains[i] ? '; domain=' + domains[i] : '';
-          document.cookie = 'googtrans=' + val + '; path=/; ' + dom;
-        }
-        document.cookie = 'googtrans=' + val + '; path=/';
+        window.clearGoogleTranslateCookie(); // wipe stale values first
+        var val = '/en/' + tc;
+        var base = 'path=/; samesite=lax';
+        _cookieDomains().forEach(function (d) {
+          var dom = d ? '; domain=' + d : '';
+          document.cookie = 'googtrans=' + val + '; ' + base + dom;
+        });
+        document.cookie = 'googtrans=' + val + '; ' + base;
       };
 
-      (function () {
-        // Restore saved language cookie BEFORE widget initialises
-        var savedLang = '';
-        try { savedLang = localStorage.getItem('saalu_selected_lang') || ''; } catch(e) {}
+      // Read the current googtrans cookie value (returns '' if unset)
+      function _readGoogTransCookie() {
+        var match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
+        return match ? decodeURIComponent(match[1]) : '';
+      }
 
-        if (savedLang && savedLang !== 'en') {
-          window.setGoogTransCookie(savedLang);
-        } else {
+      // ── LocalStorage helper (safe) ────────────────────────────────────────────
+      function _lsGet(key) {
+        try { return localStorage.getItem(key) || ''; } catch (e) { return ''; }
+      }
+      function _lsSet(key, val) {
+        try { localStorage.setItem(key, val); } catch (e) {}
+      }
+
+      // ── BOOT SEQUENCE ─────────────────────────────────────────────────────────
+      // Run immediately, synchronously, before the Google Translate script loads.
+      // localStorage is the single source of truth.
+      (function boot() {
+        var savedLang = _lsGet('saalu_selected_lang');
+
+        // Treat empty / missing / 'en' as English
+        if (!savedLang || savedLang === 'en') {
+          // Force-clear any stale googtrans cookie that may survive from a
+          // previous session where a foreign language was selected.
           window.clearGoogleTranslateCookie();
+          // Write 'en' to make the state explicit
+          _lsSet('saalu_selected_lang', 'en');
+        } else {
+          // Non-English: set the cookie NOW so Google Translate picks it up
+          // at widget initialization time (before the page content renders).
+          window.setGoogTransCookie(savedLang);
         }
 
-        function hideBanner(node) {
-          if (node && node.nodeType === 1) {
-            if (
-              node.classList.contains('goog-te-banner-frame') ||
-              node.id === 'goog-gt-tt' ||
-              node.id === ':1.container' ||
-              node.id === ':2.container'
-            ) {
-              node.style.setProperty('display', 'none', 'important');
-              node.style.setProperty('visibility', 'hidden', 'important');
-              node.style.setProperty('height', '0px', 'important');
-              node.style.setProperty('top', '-99999px', 'important');
-            }
+        // ── Layout-shift guard ──────────────────────────────────────────────
+        function hideBannerNode(node) {
+          if (!node || node.nodeType !== 1) return;
+          var hide = node.classList && (
+            node.classList.contains('goog-te-banner-frame') ||
+            node.classList.contains('goog-te-balloon-frame')
+          ) || node.id === 'goog-gt-tt' ||
+             node.id === ':1.container' ||
+             node.id === ':2.container';
+          if (hide) {
+            node.style.cssText = 'display:none!important;visibility:hidden!important;height:0!important;top:-99999px!important;';
           }
         }
 
-        var obs = new MutationObserver(function (mutations) {
-          for (var i = 0; i < mutations.length; i++) {
-            var added = mutations[i].addedNodes;
-            for (var j = 0; j < added.length; j++) {
-              hideBanner(added[j]);
+        var layoutObs = new MutationObserver(function (mutations) {
+          for (var mi = 0; mi < mutations.length; mi++) {
+            var added = mutations[mi].addedNodes;
+            for (var ni = 0; ni < added.length; ni++) {
+              hideBannerNode(added[ni]);
             }
           }
+          // Prevent body.top shift injected by Google Translate
           if (document.body && document.body.style.top && document.body.style.top !== '0px') {
-            document.body.style.top = '0px';
+            document.body.style.removeProperty('top');
           }
         });
 
+        function startLayoutObs() {
+          layoutObs.observe(document.body, { childList: true, subtree: false });
+        }
+
         if (document.body) {
-          obs.observe(document.body, { childList: true });
+          startLayoutObs();
         } else {
-          document.addEventListener('DOMContentLoaded', function () {
-            obs.observe(document.body, { childList: true });
-          });
+          document.addEventListener('DOMContentLoaded', startLayoutObs);
         }
       })();
 
+      // ── Google Translate widget init callback ─────────────────────────────────
       function googleTranslateElementInit() {
-        new google.translate.TranslateElement(
-          {
-            pageLanguage: 'en',
-            includedLanguages: 'en,sq,ca,hy,de,az,be,ru,nl,fr,bs,hr,sr,bg,el,tr,cs,da,et,fi,sv,ka,hu,is,ga,it,kk,lv,lt,lb,mt,ro,mk,no,pl,pt,sk,sl,es,gl,eu,oc,uk,cy,gd,la',
-            autoDisplay: false,
-          },
-          'google_translate_element'
-        );
-
-        // After the widget initialises, if a language was saved, trigger it again
-        // via the combo select so every page element gets translated.
-        var lang = '';
-        try { lang = localStorage.getItem('saalu_selected_lang') || ''; } catch(e) {}
-        if (lang && lang !== 'en') {
-          var attempts = 0;
-          var applyInterval = setInterval(function() {
-            var sel = document.querySelector('.goog-te-combo');
-            if (sel && sel.options && sel.options.length > 1) {
-              sel.value = lang;
-              sel.dispatchEvent(new Event('change', { bubbles: true }));
-              clearInterval(applyInterval);
-            } else if (++attempts > 30) {
-              clearInterval(applyInterval);
-            }
-          }, 200);
+        try {
+          new google.translate.TranslateElement(
+            { pageLanguage: 'en', autoDisplay: false },
+            'google_translate_element'
+          );
+        } catch (e) {
+          console.warn('[Saalu] Google Translate init error:', e);
         }
+
+        // After the widget initializes, re-apply any saved non-English language.
+        // We wait for .goog-te-combo to appear (it's injected asynchronously).
+        var savedLang = _lsGet('saalu_selected_lang');
+        if (!savedLang || savedLang === 'en') return;
+
+        var tc = gtCode(savedLang);
+        var tries = 0;
+        var maxTries = 40; // 40 × 250ms = 10s max wait
+
+        var waitForCombo = setInterval(function () {
+          tries++;
+          var sel = document.querySelector('.goog-te-combo');
+          if (sel && sel.options && sel.options.length > 1) {
+            clearInterval(waitForCombo);
+            // Find matching option
+            var idx = -1;
+            for (var i = 0; i < sel.options.length; i++) {
+              var v = (sel.options[i].value || '').toLowerCase();
+              if (v === tc.toLowerCase()) { idx = i; break; }
+            }
+            if (idx !== -1) {
+              sel.selectedIndex = idx;
+              sel.value = sel.options[idx].value;
+              sel.options[idx].selected = true;
+              sel.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+            }
+            // If option not found in combo (language not supported by GT), do nothing
+          } else if (tries >= maxTries) {
+            clearInterval(waitForCombo);
+            console.warn('[Saalu] .goog-te-combo not ready after', tries, 'attempts for lang:', savedLang);
+          }
+        }, 250);
       }
 
+      // ── Live trigger (called by React LanguageSelector) ───────────────────────
+      // Returns true if the combo select was found and updated, false otherwise.
       window.triggerGoogleTranslate = function (langCode) {
-        var aliasMap = {
-          'ca-valencia': 'ca',
-          'cnr': 'sr',
-          'nn': 'no',
-          'se': 'no',
-          'rm': 'de'
-        };
-        var targetCode = aliasMap[langCode] || langCode;
+        var tc = gtCode(langCode);
+        var sel = document.querySelector('.goog-te-combo');
+        if (!sel || !sel.options || sel.options.length === 0) return false;
 
-        var select = document.querySelector('.goog-te-combo');
-        if (!select) return false;
-
-        var targetIndex = -1;
-        for (var i = 0; i < select.options.length; i++) {
-          var opt = select.options[i];
-          if (targetCode === 'en' || langCode === 'en') {
-            if (opt.value === '' || opt.value === 'en' || opt.text.toLowerCase().indexOf('select') !== -1 || opt.text.toLowerCase().indexOf('english') !== -1) {
-              targetIndex = i;
-              break;
+        var idx = -1;
+        for (var i = 0; i < sel.options.length; i++) {
+          var v = (sel.options[i].value || '').toLowerCase();
+          if (tc === 'en' || langCode === 'en') {
+            // Restore English: find the "Select Language" / empty / "en" option
+            if (v === '' || v === 'en' ||
+                sel.options[i].text.toLowerCase().indexOf('select') !== -1 ||
+                sel.options[i].text.toLowerCase().indexOf('english') !== -1) {
+              idx = i; break;
             }
           } else {
-            if (opt.value.toLowerCase() === targetCode.toLowerCase() || opt.value.toLowerCase() === langCode.toLowerCase()) {
-              targetIndex = i;
-              break;
-            }
+            if (v === tc.toLowerCase()) { idx = i; break; }
           }
         }
 
-        if (targetIndex !== -1) {
-          select.selectedIndex = targetIndex;
-          select.value = select.options[targetIndex].value;
-          select.options[targetIndex].selected = true;
-        } else {
-          select.value = (targetCode === 'en') ? '' : targetCode;
+        if (idx === -1) {
+          // Language not found in combo — do NOT select random option
+          console.warn('[Saalu] Language not found in GT combo:', langCode, '(tc=' + tc + ')');
+          return false;
         }
 
-        try {
-          select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
-        } catch (e) {}
-
+        sel.selectedIndex = idx;
+        sel.value = sel.options[idx].value;
+        sel.options[idx].selected = true;
+        sel.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
         return true;
       };
     </script>
-    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+
+    <script
+      src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+      async
+      defer
+    ></script>
   </body>
 </html>

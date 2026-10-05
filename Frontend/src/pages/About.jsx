@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../index.css";
 import "./About.css";
 import useScrollAnimation from "../hooks/useScrollAnimation";
@@ -9,34 +10,8 @@ import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
 import aboutBannerBg from "../assets/hero_bg.jpg";
 import ourStoryImg from "../assets/about_our_story.jpg";
-import journeyImg from "../assets/about_journey_ahead.jpg";
 
 const ICONS = {
-  shirt: (
-    <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-  ),
-  globe: (
-    <>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-      <path d="M2 12h20" />
-    </>
-  ),
-  sparkles: (
-    <>
-      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-      <path d="M20 3v4" />
-      <path d="M22 5h-4" />
-    </>
-  ),
-  package: (
-    <>
-      <path d="m7.5 4.27 9 5.15" />
-      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-      <path d="m3.3 7 8.7 5 8.7-5" />
-      <path d="M12 22V12" />
-    </>
-  ),
   "trending-up": (
     <>
       <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
@@ -57,58 +32,14 @@ const ICONS = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </>
   ),
-  tag: (
+  globe: (
     <>
-      <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l4.71-4.71c.94-.94.94-2.48 0-3.42L12 2Z" />
-      <path d="M7 7h.01" />
-    </>
-  ),
-  printer: (
-    <>
-      <polyline points="6 9 6 2 18 2 18 9" />
-      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-      <rect x="6" y="14" width="12" height="8" />
-    </>
-  ),
-  layers: (
-    <>
-      <polygon points="12 2 2 7 12 12 22 7 12 2" />
-      <polyline points="2 17 12 22 22 17" />
-      <polyline points="2 12 12 17 22 12" />
-    </>
-  ),
-  store: (
-    <>
-      <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
-      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-      <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
-      <path d="M2 7h20" />
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+      <path d="M2 12h20" />
     </>
   ),
 };
-
-const WHAT_WE_DO = [
-  {
-    icon: "shirt",
-    title: "Custom-Printed T-Shirts",
-    body: "Tailored designs for families, groups, businesses, events, and organizations — plus retail and any other purpose as per the customer's requirement.",
-  },
-  {
-    icon: "globe",
-    title: "Garment Exports",
-    body: "High-quality apparel sourced from different manufacturers and shipped globally to meet international demand.",
-  },
-  {
-    icon: "sparkles",
-    title: "Personalized Solutions",
-    body: "Flexible printing and design options built around each customer's specific needs and brand identity.",
-  },
-  {
-    icon: "package",
-    title: "Bulk & Retail Orders",
-    body: "Scalable sourcing capacity across multiple manufacturers for both small and large consignments.",
-  },
-];
 
 const WHY_CHOOSE_US = [
   {
@@ -135,12 +66,6 @@ const WHY_CHOOSE_US = [
     title: "Global Reach",
     body: "Efficient logistics and supply chain management for timely delivery worldwide.",
   },
-  {
-    icon: "tag",
-    num: "05",
-    title: "Private Label & Custom Branding",
-    body: "Custom private labeling, neck tag printing, woven care labels, and end-to-end brand solutions tailored for your business.",
-  },
 ];
 
 export default function About() {
@@ -154,7 +79,6 @@ export default function About() {
       <PageBanner
         bgImage={aboutBannerBg}
         title="About Us"
-        subtitle="Trusted Global Partner in the Apparel Industry"
       />
 
       {/* ---------- Company Overview ---------- */}
@@ -179,16 +103,13 @@ export default function About() {
               <p>
                 Our incorporation objectives empower us to operate retail outlets, warehouses, online
                 platforms, and trading facilities, while also aiming to build strong partnerships at
-                national and international level. Over time, we have strategically focused our
-                expertise on the textile and garment sector, specializing in the export of
-                custom-printed T-shirts and apparel designed to meet diverse customer requirements
-                worldwide.
+                national and international level.
               </p>
             </div>
             <div className="about-overview__image-wrap" data-animate="fade-right">
               <img
                 src={ourStoryImg}
-                alt="Saaluvesa textile garment manufacturing studio"
+                alt="Saaluvesa Enterprises Workshop and Operations"
                 className="about-overview__image"
               />
             </div>
@@ -196,47 +117,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* ---------- What We Do ---------- */}
-      <section className="about-section about-section--navy">
-        <div className="wrap">
-          <div className="about-section__head" data-animate="fade-up">
-            <div className="eyebrow about-section__eyebrow">What We Do</div>
-            <h2>Creativity, Technology, and Craftsmanship.</h2>
-            <p>
-              At Saaluvesa Enterprises, we combine creativity, technology, and quality
-              craftsmanship to deliver garments that reflect individuality and brand identity.
-            </p>
-          </div>
-
-          <div className="about-grid">
-            {WHAT_WE_DO.map((item, i) => (
-              <div
-                className={`about-card about-card--dark delay-${i + 1}`}
-                data-animate="card"
-                key={item.title}
-              >
-                <span className="about-card__num">{String(i + 1).padStart(2, "0")}</span>
-                <span className="about-card__icon" aria-hidden="true">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    {ICONS[item.icon]}
-                  </svg>
-                </span>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- Vision & Mission ---------- */}
+      {/* ---------- Vision & Mission (From PDF) ---------- */}
       <section className="about-section about-section--ivory-deep">
         <div className="wrap">
           <div className="about-section__head" data-animate="fade-up">
@@ -248,18 +129,17 @@ export default function About() {
             <div className="about-vm-card delay-1" data-animate="card">
               <h3>Our Vision</h3>
               <p>
-                To become a trusted global partner in the apparel industry by delivering
-                innovative, high quality, and customized garments that empower individuals and
-                businesses to express themselves.
+                To become a trusted global export partner recognized for reliability, quality, ethical business practices, and customer-focused solutions across international markets.
               </p>
             </div>
 
             <div className="about-vm-card delay-2" data-animate="card">
               <h3>Our Mission</h3>
               <ul>
-                <li>Provide world-class custom-printed garments at competitive export standards.</li>
-                <li>Build long-term relationships with clients through reliability, transparency, and timely delivery.</li>
-                <li>Continuously innovate in textile design, printing technology, and sustainable production practices.</li>
+                <li>To promote quality products from India to global markets.</li>
+                <li>To create sustainable value for customers, suppliers, and stakeholders.</li>
+                <li>To support international trade through efficient sourcing and export management.</li>
+                <li>To establish long-term partnerships based on trust, transparency, and mutual growth.</li>
               </ul>
             </div>
           </div>
@@ -301,74 +181,28 @@ export default function About() {
               </div>
             ))}
           </div>
-
-          {/* Castbull Apparel Brand Website Callout */}
-          <div className="about-why-cta" data-animate="fade-up">
-            <div className="about-why-cta__content">
-              <div className="about-why-cta__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                  <polyline points="3.29 7 12 12 20.71 7" />
-                  <line x1="12" y1="22" x2="12" y2="12" />
-                </svg>
-              </div>
-              <p className="about-why-cta__text">
-                Requested to proceed with our Integrated Customer-friendly Apparel Brand Website,{" "}
-                <a
-                  href="https://castbull.co.in/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://castbull.co.in/
-                </a>
-                , to place all your plain apparel, custom printing, and private label branding requirements.
-              </p>
-            </div>
-            <a
-              href="https://castbull.co.in/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn--mint btn--pill about-why-cta__btn"
-            >
-              <span>Visit Castbull</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* ---------- Our Journey Ahead ---------- */}
+      {/* ---------- Partner With Us (From PDF) ---------- */}
       <section className="about-section about-section--ivory">
-        <div className="wrap about-overview">
-          <div className="about-overview__layout about-overview__layout--reverse">
-            <div className="about-overview__text" data-animate="fade-right">
-              <div className="about-section__head">
-                <div className="eyebrow about-section__eyebrow">Our Journey Ahead</div>
-                <h2>Rooted in Textiles, Reaching the World.</h2>
-              </div>
-              <p>
-                While our incorporation objectives allow us to explore diverse industries, our
-                current journey is driven by passion for textiles and apparel. Saaluvesa Enterprises
-                Private Limited is committed to expanding its footprint in the global garment export
-                market, strengthening India's reputation in the textile industry, and delivering
-                products that combine tradition, innovation, and modern style.
-              </p>
-              <p>
-                Partner with us to bring your vision to life, whether in textiles or any other export
-                related requirements. Let's explore how we can serve your needs globally.
-              </p>
-            </div>
-            <div className="about-overview__image-wrap" data-animate="fade-left">
-              <img
-                src={journeyImg}
-                alt="Global garment and textile export operations"
-                className="about-overview__image"
-              />
-            </div>
+        <div className="wrap">
+          <div className="about-partner-card" data-animate="card">
+            <div className="eyebrow about-section__eyebrow" style={{ justifyContent: "center" }}>Global Collaboration</div>
+            <h3>Partner With Us</h3>
+            <p>
+              Whether you are an importer, distributor, wholesaler, retailer, or sourcing partner, Saaluvesa Enterprises Private Limited is committed to delivering dependable export solutions that support your business growth.
+            </p>
+            <p className="about-partner-tagline">
+              Together, we connect products, businesses, and opportunities across borders.
+            </p>
+            <Link to="/contact" className="btn btn--mint">
+              <span>Contact Us</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>

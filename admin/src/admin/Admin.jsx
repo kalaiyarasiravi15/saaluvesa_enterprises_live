@@ -13,6 +13,8 @@ import {
 } from "react-router-dom";
 import { api } from "../lib/api";
 import { Icon } from "./icons";
+import LabelStudio from "./labels/LabelStudio.jsx";
+import BannerAdmin from "./BannerAdmin.jsx";
 import {
   LANGUAGES as ADMIN_LANGUAGES,
   EUROPE_COUNTRIES as ADMIN_EUROPE_COUNTRIES,
@@ -73,6 +75,7 @@ const pageNames = {
   "/": "Dashboard",
   "/products": "Products",
   "/export-documents": "Export documents",
+  "/labels": "Create Label",
   "/contacts": "Contacts",
 };
 
@@ -646,7 +649,7 @@ function Login() {
       setError(
         err.status === 401
           ? err.message || "Invalid credentials"
-          : err.message || "Unable to connect to the backend server. Please make sure the backend is running on http://localhost:5000.",
+          : err.message || "Unable to connect to the backend server. Please make sure the backend is running on http://localhost:3000.",
       );
       setBusy(false);
     }
@@ -790,7 +793,7 @@ function Sidebar() {
 
 function Topbar({ notifItems, unreadCount, onViewNotification, onMarkAllNotificationsRead }) {
   const location = useLocation();
-  const pageName = pageNames[location.pathname] || "Admin";
+  const pageName = pageNames[location.pathname] || (location.pathname.startsWith("/labels/") ? "Edit Label" : "Admin");
 
   return (
     <header className="admin-topbar notranslate" translate="no">
@@ -927,6 +930,8 @@ function Shell() {
     { to: "/", label: "Overview", icon: "dashboard", end: true },
     { to: "/products", label: "Products", icon: "package" },
     { to: "/export-documents", label: "Export documents", icon: "file-text" },
+    { to: "/labels", label: "Create Label", icon: "file-text" },
+    { to: "/banner", label: "Home Banner", icon: "clipboard" },
     { to: "/contacts", label: "Contacts", icon: "mail" },
   ];
 
@@ -2491,37 +2496,40 @@ function ExportDocumentPreview({ document: rawDocument, type, langCode = "en", t
   const signatoryName = document.signatory_name || (t.val_na || "N/A");
   const signatoryDesignation = document.signatory_designation ? tr(document.signatory_designation) : (t.val_na || "N/A");
 
-  const itemRows = document.items?.map((item, index) =>
+  // Memoize itemRows calculation to ensure it recalculates when langCode changes
+  const itemRows = useMemo(() => {
+    const tr_fn = (val) => translateDocValue(val, langCode);
+    return document.items?.map((item, index) =>
     isPacking ? (
       <tr key={item.id || index}>
         <td>{index + 1}</td>
         <td>{item.qty || 1}</td>
         <td>
-          <b>{tr(item.product_name)}</b>
+          <b>{tr_fn(item.product_name)}</b>
           {(item.size || item.color) && (
             <div style={{ fontSize: "10px", color: "var(--admin-ink-soft)" }}>
-              {[item.size && `- ${t.size || "Size"}: ${tr(item.size)}`, item.color && `${t.color || "Color"}: ${tr(item.color)}`].filter(Boolean).join(" ")}
+              {[item.size && `- ${t.size || "Size"}: ${tr_fn(item.size)}`, item.color && `${t.color || "Color"}: ${tr_fn(item.color)}`].filter(Boolean).join(" ")}
             </div>
           )}
         </td>
         <td>{item.hs_code || document.hs_code || "84433210"}</td>
         <td>{(Number(item.unit_net_weight || 0) * 1000).toFixed(2)}</td>
-        <td>{tr(item.uom || "PCS")}</td>
+        <td>{tr_fn(item.uom || "PCS")}</td>
       </tr>
     ) : (
       <tr key={item.id || index}>
         <td>{index + 1}</td>
         <td>
-          {tr(item.product_name)}
+          {tr_fn(item.product_name)}
           {(item.size || item.color) && (
             <div style={{ fontSize: "10px", color: "var(--admin-ink-soft)" }}>
-              {[item.size && `- ${t.size || "Size"}: ${tr(item.size)}`, item.color && `${t.color || "Color"}: ${tr(item.color)}`].filter(Boolean).join(" ")}
+              {[item.size && `- ${t.size || "Size"}: ${tr_fn(item.size)}`, item.color && `${t.color || "Color"}: ${tr_fn(item.color)}`].filter(Boolean).join(" ")}
             </div>
           )}
         </td>
         <td>{item.hs_code || document.hs_code || "84433210"}</td>
-        <td>{tr(item.country_of_origin || document.country_of_origin || "India")}</td>
-        <td>{item.qty || 1} {tr(item.uom || "PCS")}</td>
+        <td>{tr_fn(item.country_of_origin || document.country_of_origin || "India")}</td>
+        <td>{item.qty || 1} {tr_fn(item.uom || "PCS")}</td>
         <td>{document.currency_code || "USD"} {Math.round(Number(item.unit_value || 0))}</td>
         <td>{document.currency_code || "USD"} {Number(item.sub_total || Number(item.qty || 1) * Math.round(Number(item.unit_value || 0)) || 0).toFixed(2)}</td>
         <td>{(Number(item.unit_net_weight || 0) * 1000).toFixed(2)}</td>
@@ -2529,6 +2537,7 @@ function ExportDocumentPreview({ document: rawDocument, type, langCode = "en", t
       </tr>
     )
   );
+  }, [document.items, langCode, document.hs_code, document.currency_code, t.size, t.color]);
 
   // Extract all configured taxes (up to 5 max) without Tax 1/Tax 2 prefix
   const taxEntries = [
@@ -3485,7 +3494,10 @@ function ExportDocuments() {
     total_net_weight_lbs: ((formTotals.weight / 1000) * 2.20462262).toFixed(3),
   };
 
+  const [docPage, setDocPage] = useState(1);
   const searchQuery = (localSearch || shellQuery || "").trim().toLowerCase();
+  useEffect(() => setDocPage(1), [searchQuery]);
+
   const filteredRows = rows.filter((r) => {
     if (!searchQuery) return true;
     const searchString = [
@@ -3505,6 +3517,10 @@ function ExportDocuments() {
       .toLowerCase();
     return searchString.includes(searchQuery);
   });
+
+  const docPageCount = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+  const currentDocPage = Math.min(docPage, docPageCount);
+  const pagedRows = filteredRows.slice((currentDocPage - 1) * PAGE_SIZE, currentDocPage * PAGE_SIZE);
 
   return (
     <div className="admin-page notranslate" translate="no">
@@ -3551,6 +3567,7 @@ function ExportDocuments() {
           </div>
           <span className="export-docs-count">
             {filteredRows.length} {filteredRows.length === 1 ? "document" : "documents"}
+            {docPageCount > 1 && ` · Page ${currentDocPage} of ${docPageCount}`}
           </span>
         </div>
 
@@ -3571,7 +3588,7 @@ function ExportDocuments() {
                 </tr>
               </thead>
               <tbody>
-                {filteredRows.map((doc) => (
+                {pagedRows.map((doc) => (
                   <tr key={doc.id} className="admin-row" onClick={() => openViewModal(doc)}>
                     <td>
                       <span className="cell-invoice-badge">
@@ -3676,6 +3693,8 @@ function ExportDocuments() {
           />
         )}
       </div>
+
+      <Pagination page={currentDocPage} pageCount={docPageCount} onPage={setDocPage} />
 
       {/* ── Add / Edit Export Document Modal (Sections 1 to 8 + Document Options) ── */}
       <Modal
@@ -5255,6 +5274,10 @@ export default function Admin() {
             <Route index element={<Dashboard />} />
             <Route path="products" element={<ProductsAdmin />} />
             <Route path="export-documents" element={<ExportDocuments />} />
+            <Route path="labels" element={<LabelStudio LanguageSelector={ExportDocLangSelector} />} />
+            <Route path="labels/new" element={<LabelStudio LanguageSelector={ExportDocLangSelector} />} />
+            <Route path="labels/:id/edit" element={<LabelStudio LanguageSelector={ExportDocLangSelector} />} />
+            <Route path="banner" element={<BannerAdmin />} />
             <Route path="contacts" element={<Contacts />} />
           </Route>
         </Route>

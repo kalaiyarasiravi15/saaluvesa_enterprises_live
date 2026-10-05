@@ -34,6 +34,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Total Amount in Words:",
     signatory: "Authorized Signatory",
     manager: "Manager",
+    t_shirt: "T Shirt",
   },
   de: {
     commercial: "HANDELSRECHNUNG",
@@ -61,6 +62,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Gesamtbetrag in Worten:",
     signatory: "Zeichnungsberechtigter",
     manager: "Manager",
+    t_shirt: "T-Shirt",
   },
   fr: {
     commercial: "FACTURE COMMERCIALE",
@@ -88,6 +90,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Montant Total en Lettres :",
     signatory: "Signataire Autorisé",
     manager: "Directeur",
+    t_shirt: "T-shirt",
   },
   es: {
     commercial: "FACTURA COMERCIAL",
@@ -115,6 +118,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Monto Total en Letras:",
     signatory: "Firmante Autorizado",
     manager: "Gerente",
+    t_shirt: "Camiseta",
   },
   it: {
     commercial: "FATTURA COMMERCIALE",
@@ -142,6 +146,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Importo Totale in Lettere:",
     signatory: "Firmatario Autorizzato",
     manager: "Manager",
+    t_shirt: "Maglietta",
   },
   nl: {
     commercial: "HANDELSFACTUUR",
@@ -169,6 +174,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Totaalbedrag in Woorden:",
     signatory: "Bevoegde Ondertekenaar",
     manager: "Manager",
+    t_shirt: "T-shirt",
   },
   pt: {
     commercial: "FATURA COMERCIAL",
@@ -196,6 +202,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Valor Total por Extenso:",
     signatory: "Signatário Autorizado",
     manager: "Gerente",
+    t_shirt: "Camiseta",
   },
   pl: {
     commercial: "FAKTURA HANDLOWA",
@@ -223,6 +230,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Kwota Słownie:",
     signatory: "Upoważniony Podpis",
     manager: "Kierownik",
+    t_shirt: "Koszulka",
   },
   ru: {
     commercial: "КОММЕРЧЕСКИЙ ИНВОЙС",
@@ -250,6 +258,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Сумма прописью:",
     signatory: "Уполномоченная подпись",
     manager: "Менеджер",
+    t_shirt: "Футболка",
   },
   tr: {
     commercial: "TİCARİ FATURA",
@@ -277,6 +286,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Yazıyla Tutar:",
     signatory: "Yetkili İmza",
     manager: "Müdür",
+    t_shirt: "Tişört",
   },
   el: {
     commercial: "ΕΜΠΟΡΙΚΟ ΤΙΜΟΛΟΓΙΟ",
@@ -304,6 +314,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Ποσό Ολογράφως:",
     signatory: "Εξουσιοδοτημένος Υπογράφων",
     manager: "Διευθυντής",
+    t_shirt: "Μπλουζάκι",
   },
   sv: {
     commercial: "HANDELSFAKTURA",
@@ -331,6 +342,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Belopp i Ord:",
     signatory: "Auktoriserad Firmatecknare",
     manager: "Chef",
+    t_shirt: "T-shirt",
   },
   cs: {
     commercial: "OBCHODNÍ FAKTURA",
@@ -358,6 +370,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Částka Slovy:",
     signatory: "Oprávněný Podpis",
     manager: "Manažer",
+    t_shirt: "Tričko",
   },
   ro: {
     commercial: "FACTURĂ COMERCIALĂ",
@@ -385,6 +398,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Suma în Litere:",
     signatory: "Semnatar Autorizat",
     manager: "Director",
+    t_shirt: "Tricou",
   },
   hu: {
     commercial: "KERESKEDELMI SZÁMLA",
@@ -412,6 +426,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Összeg Betűvel:",
     signatory: "Hivatalos Aláíró",
     manager: "Menedzser",
+    t_shirt: "Póló",
   },
   da: {
     commercial: "HANDELSFAKTURA",
@@ -439,6 +454,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Beløb med Ord:",
     signatory: "Bemyndiget Underskriver",
     manager: "Leder",
+    t_shirt: "T-shirt",
   },
   fi: {
     commercial: "KAUPPALASKU",
@@ -466,6 +482,7 @@ export const PDF_TRANSLATIONS = {
     total_amount_words: "Summa Sanoin:",
     signatory: "Valtuutettu Allekirjoittaja",
     manager: "Päällikkö",
+    t_shirt: "T-paita",
   },
 };
 
@@ -1272,7 +1289,7 @@ async function buildExportPdf(document, documentType, { probe = false, scale = 1
       const values = [
         i + 1,
         Number(item.qty || 1).toFixed(3),
-        item.product_name || "Product",
+        (item.product_name ? (t[item.product_name.trim().toLowerCase().replace(/[\s-]+/g, "_")] || item.product_name) : "Product"),
         item.hs_code || document.hs_code || "N/A",
         (Number(item.unit_net_weight || 0) * 1000).toFixed(2),
         item.uom || "PCS",
@@ -1405,7 +1422,7 @@ async function buildExportPdf(document, documentType, { probe = false, scale = 1
       const itemSubTotal = Number(item.sub_total || (Number(item.qty || 1) * unitVal)).toFixed(2);
       const values = [
         i + 1,
-        item.product_name || "Product",
+        (item.product_name ? (t[item.product_name.trim().toLowerCase().replace(/[\s-]+/g, "_")] || item.product_name) : "Product"),
         item.hs_code || document.hs_code || "N/A",
         item.country_of_origin || document.country_of_origin || "India",
         `${item.qty || 1} ${item.uom || "PCS"}`,

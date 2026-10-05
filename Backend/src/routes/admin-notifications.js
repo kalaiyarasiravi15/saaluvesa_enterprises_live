@@ -28,35 +28,51 @@ router.get("/", async (req, res) => {
     console.warn("Notification backfill notice:", err.message);
   }
 
-  const [notifications, unreadCount] = await Promise.all([
-    Notification.findAll({
-      include: [
-        {
-          model: ContactSubmission,
-          as: "submission",
-          include: [{ model: Product, attributes: ["id", "name"] }],
-        },
-      ],
-      order: [["createdAt", "DESC"]],
-      limit,
-    }),
-    Notification.count({ where: { is_read: false } }),
-  ]);
-  res.json({ notifications: notifications.filter((n) => n.submission), unreadCount });
+  try {
+    const [notifications, unreadCount] = await Promise.all([
+      Notification.findAll({
+        include: [
+          {
+            model: ContactSubmission,
+            as: "submission",
+            include: [{ model: Product, attributes: ["id", "name"] }],
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+        limit,
+      }),
+      Notification.count({ where: { is_read: false } }),
+    ]);
+    return res.json({ notifications: notifications.filter((n) => n.submission), unreadCount });
+  } catch (queryErr) {
+    console.warn("Notifications query warning:", queryErr.message || queryErr);
+    return res.json({ notifications: [], unreadCount: 0 });
+  }
 });
 
 router.post("/read-all", async (_req, res) => {
-  await Notification.update({ is_read: true }, { where: { is_read: false } });
-  res.json({ ok: true });
+  try {
+    await Notification.update({ is_read: true }, { where: { is_read: false } });
+    return res.json({ ok: true });
+  } catch (err) {
+    console.warn("Notifications read-all warning:", err.message || err);
+    return res.json({ ok: false, message: err.message });
+  }
 });
 
-router.patch("/:id/read", async (req, res) => {  const row = await Notification.findByPk(req.params.id);
-  if (!row) return res.status(404).json({ message: "Notification not found" });
-  if (!row.is_read) {
-    row.is_read = true;
-    await row.save();
+router.patch("/:id/read", async (req, res) => {
+  try {
+    const row = await Notification.findByPk(req.params.id);
+    if (!row) return res.status(404).json({ message: "Notification not found" });
+    if (!row.is_read) {
+      row.is_read = true;
+      await row.save();
+    }
+    return res.json(row);
+  } catch (err) {
+    console.warn("Notification read patch warning:", err.message || err);
+    return res.status(500).json({ message: err.message });
   }
-  res.json(row);
 });
 
 export default router;

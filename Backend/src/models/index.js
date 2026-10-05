@@ -188,22 +188,30 @@ ExportDocument.hasMany(ExportDocumentItem, {
   foreignKey: "export_document_id",
   as: "items",
   onDelete: "CASCADE",
+  constraints: false,
 });
 ExportDocumentItem.belongsTo(ExportDocument, {
   foreignKey: "export_document_id",
+  constraints: false,
 });
 ExportDocument.hasMany(ExportDocumentAudit, {
   foreignKey: "export_document_id",
   as: "audits",
   onDelete: "CASCADE",
+  constraints: false,
 });
 ExportDocumentAudit.belongsTo(ExportDocument, {
   foreignKey: "export_document_id",
+  constraints: false,
 });
-AdminUser.hasMany(ExportDocumentAudit, { foreignKey: "edited_by" });
+AdminUser.hasMany(ExportDocumentAudit, {
+  foreignKey: "edited_by",
+  constraints: false,
+});
 ExportDocumentAudit.belongsTo(AdminUser, {
   foreignKey: "edited_by",
   as: "editor",
+  constraints: false,
 });
 Notification.belongsTo(ContactSubmission, {
   foreignKey: "contact_submission_id",
@@ -215,3 +223,5 @@ ContactSubmission.hasMany(Notification, {
   foreignKey: "contact_submission_id",
   constraints: false,
 });
+
+export { Label } from "./label.js";

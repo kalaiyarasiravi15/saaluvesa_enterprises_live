@@ -6257,6 +6257,21 @@ export function getDocTranslation(langCode = "en") {
 // ── Multi-language Dynamic Value Translations ─────────────────────────────
 const VALUE_TRANSLATIONS = {
   // Products
+  "t shirt": {
+    de: "T-Shirt", fr: "T-shirt", es: "Camiseta", it: "Maglietta", nl: "T-shirt", pt: "Camiseta", ru: "Футболка", pl: "Koszulka", tr: "Tişört",
+    sq: "Bluzë", ca: "Samarreta", el: "Μπλουζάκι", cs: "Tričko", ro: "Tricou", hu: "Póló", da: "T-shirt", fi: "T-paita", sv: "T-tröja", hr: "Majica",
+    sr: "Мајица", bg: "Тениска", uk: "Футболка", sk: "Tričko", sl: "Majica", no: "T-skjorte", et: "T-särk", lv: "T-krekls", lt: "Marškinėliai",
+    ga: "Geansaí", is: "Bolur", eu: "Kamiseta", gl: "Camiseta", hy: "Շապիկ", az: "Köynək", be: "Футболка", ka: "მაისური", kk: "Футболка",
+    mk: "Маица", bs: "Majica", lb: "T-Shirt", mt: "T-shirt", cy: "Crys-T", gd: "Lèine-T", la: "Camisia", oc: "Samarra"
+  },
+  "how are you": {
+    de: "Wie geht es dir", fr: "Comment allez-vous", es: "Cómo estás", it: "Come stai", nl: "Hoe gaat het", pt: "Como vai", ru: "Как дела", pl: "Jak się masz", tr: "Nasılsın",
+    sq: "Si është", ca: "Com estàs", el: "Πώς είσαι", cs: "Jak se máš", ro: "Cum ești", hu: "Hogy vagy", da: "Hvordan går det", fi: "Kuinka voit", sv: "Hur mår du", hr: "Kako si",
+    sr: "Како си", bg: "Как си", uk: "Як ти", sk: "Ako sa máš", sl: "Kako si", no: "Hvordan går det", et: "Kuidas sul läheb", lv: "Kā tu?", lt: "Kaip laikaisi",
+    hy: "Ինչպես ես", az: "Necəsən", be: "Як ты", bs: "Kako si", ka: "როგორ ხარ", kk: "Қалайсың",
+    is: "Hvernig gengur þér", ga: "Conas atá tú", mk: "Како си", lb: "Wéi gees dir", mt: "Kif int", gl: "Como estás", eu: "Nola zaude", oc: "Cóm vas",
+    cy: "Sut wyt ti", gd: "Ciamar a tha thu", la: "Quomodo vales"
+  },
   "t-shirt": {
     de: "T-Shirt", fr: "T-shirt", es: "Camiseta", it: "Maglietta", nl: "T-shirt", pt: "Camiseta", ru: "Футболка", pl: "Koszulka", tr: "Tişört",
     sq: "Bluzë", ca: "Samarreta", el: "Μπλουζάκι", cs: "Tričko", ro: "Tricou", hu: "Póló", da: "T-shirt", fi: "T-paita", sv: "T-tröja", hr: "Majica",
@@ -6273,9 +6288,21 @@ const VALUE_TRANSLATIONS = {
     de: "Einfarbige T-Shirts", fr: "T-shirts unis", es: "Camisetas lisas", it: "Magliette semplici", nl: "Eenvoudige T-shirts", pt: "Camisetas básicas", ru: "Однотонные футболки", pl: "Gładkie koszulki", tr: "Düz Tişörtler",
     sq: "Bluza të thjeshta", ca: "Samarretes llises", el: "Απλά μπλουζάκια", cs: "Jednobarevná trička", ro: "Tricouri simple", hu: "Egyszínű pólók", da: "Ensfarvede T-shirts", fi: "Yksiväriset T-paidat", sv: "Enfärgade T-shirts", hr: "Jednobojne majice"
   },
+  "plain cotton t-shirts": {
+    de: "Einfarbige Baumwoll T-Shirts", fr: "T-shirts en coton uni", es: "Camisetas de algodón liso", it: "Magliette in cotone tinta unita", nl: "Eenvoudige katoenen T-shirts", pt: "Camisetas de algodão básicas", ru: "Однотонные хлопковые футболки", pl: "Gładkie bawełniane koszulki", tr: "Düz Pamuklu Tişörtler",
+    sq: "Bluza të thjeshta prej pambuku", ca: "Samarretes de cotó llises", el: "Απλά μπλουζάκια από βαμβάκι", cs: "Jednobarevná bavlněná trička", ro: "Tricouri simple din bumbac", hu: "Egyszínű pamut pólók", da: "Ensfarvede bomulds T-shirts", fi: "Yksiväriset puuvillapaita", sv: "Enfärgade bomulls T-shirts", hr: "Jednobojne pamučne majice"
+  },
+  "custom-printed t-shirts": {
+    de: "Bedruckte individuelle T-Shirts", fr: "T-shirts personnalisés imprimés", es: "Camisetas personalizadas impresas", it: "Magliette stampate personalizzate", nl: "Bedrukte aangepaste T-shirts", pt: "Camisetas impressas personalizadas", ru: "Печатные индивидуальные футболки", pl: "Drukowane spersonalizowane koszulki", tr: "Baskılı Özel Tasarım Tişörtler",
+    sq: "Bluza të personalizuara të shtypura", ca: "Samarretes personalitzades impreses", el: "Εκτυπωμένα προσαρμοσμένα μπλουζάκια", cs: "Tisknutá přizpůsobená trička", ro: "Tricouri tipărite personalizate", hu: "Nyomtatott egyedi pólók", da: "Trykte brugerdefinerede T-shirts", fi: "Painetut räätälöidyt T-paidat", sv: "Tryckta skräddarsydda T-shirts", hr: "Tiskane prilagođene majice"
+  },
   "personalized merch": {
     de: "Personalisierte Merch-Artikel", fr: "Produits dérivés personnalisés", es: "Merchandising personalizado", it: "Merchandising personalizzato", nl: "Gepersonaliseerde merchandise", pt: "Merchandising personalizado", ru: "Персонализированная продукция", pl: "Spersonalizowany merch", tr: "Kişiselleştirilmiş Ürünler",
     sq: "Mallra të personalizuara", ca: "Marxandatge personalitzat", el: "Εξατομικευμένα εμπορεύματα", cs: "Personalizovaný merch", ro: "Produse personalizate", hu: "Személyre szabott termékek", da: "Personliggjort merchandise", fi: "Personoidut tuotteet", sv: "Personliga profilprodukter", hr: "Personalizirani proizvodi"
+  },
+  "personalized apparel & merch": {
+    de: "Personalisierte Bekleidung & Merch", fr: "Vêtements personnalisés et produits dérivés", es: "Ropa personalizada y merchandising", it: "Abbigliamento personalizzato e merchandising", nl: "Gepersonaliseerde kleding & merchandise", pt: "Vestuário personalizado e merchandising", ru: "Персонализированная одежда и продукция", pl: "Spersonalizowana odzież i merch", tr: "Kişiselleştirilmiş Giysi ve Ürünler",
+    sq: "Veshjeje të personalizuara dhe mallra", ca: "Roba personalitzada i marxandatge", el: "Εξατομικευμένα ενδύματα και εμπορεύματα", cs: "Personalizované oblečení a merch", ro: "Îmbrăcăminte personalizată și produse", hu: "Személyre szabott ruházat és termékek", da: "Personligt beklædning og merchandise", fi: "Personoidut vaatteet ja tuotteet", sv: "Personlig kläder och profilprodukter", hr: "Personalizirani odjeća i proizvodi"
   },
   "hoodie": {
     de: "Kapuzenpullover", fr: "Sweat à capuche", es: "Sudadera con capucha", it: "Felpa con cappuccio", nl: "Hoodie", pt: "Moletom com capuz", ru: "Худи", pl: "Bluza z kapturem", tr: "Kapüşonlu"
@@ -6568,6 +6595,12 @@ export function translateDocValue(val, langCode = "en") {
   const trimmed = val.trim();
   const lower = trimmed.toLowerCase();
 
+  // Explicit check for all t-shirt variations FIRST
+  if (lower === "t-shirts" || lower === "t-shirt" || lower === "t shirt" || lower === "t shirts") {
+    const translated = VALUE_TRANSLATIONS["t shirt"]?.[lang] || VALUE_TRANSLATIONS["t-shirt"]?.[lang];
+    if (translated) return translated;
+  }
+
   // Check direct value translations dictionary
   if (VALUE_TRANSLATIONS[lower] && VALUE_TRANSLATIONS[lower][lang]) {
     return VALUE_TRANSLATIONS[lower][lang];
@@ -6582,9 +6615,6 @@ export function translateDocValue(val, langCode = "en") {
   }
   if (lower === "cad" || lower === "cash against documents") {
     return (VALUE_TRANSLATIONS["cash against documents"] && VALUE_TRANSLATIONS["cash against documents"][lang]) || val;
-  }
-  if (lower === "t-shirts" || lower === "t-shirt") {
-    return (VALUE_TRANSLATIONS["t-shirt"] && VALUE_TRANSLATIONS["t-shirt"][lang]) || val;
   }
   if (lower === "pcs" || lower === "pcs.") {
     return (VALUE_TRANSLATIONS["pcs"] && VALUE_TRANSLATIONS["pcs"][lang]) || val;

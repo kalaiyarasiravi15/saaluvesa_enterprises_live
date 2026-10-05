@@ -1,0 +1,364 @@
+/* ============================================================
+   Labels Page – Frontend
+   ============================================================ */
+
+.labels-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-ivory);
+}
+.labels-main {
+  flex: 1;
+  padding-top: 120px;
+  padding-bottom: 80px;
+}
+
+/* ── Page header ────────────────────────────────────────────── */
+.labels-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.labels-page-header .eyebrow {
+  color: var(--color-mint-dim);
+}
+.labels-page-title {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 800;
+  color: var(--color-navy);
+  margin: 8px 0 6px;
+  line-height: 1.15;
+}
+.labels-page-sub {
+  color: var(--color-ink-soft);
+  font-size: 15px;
+  margin: 0;
+  max-width: 480px;
+}
+.labels-create-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ── Search ─────────────────────────────────────────────────── */
+.labels-search-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.labels-search-input {
+  flex: 1;
+  max-width: 360px;
+  border: 1.5px solid var(--color-line);
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  background: white;
+  color: var(--color-ink);
+  transition: border-color 0.2s;
+}
+.labels-search-input:focus {
+  outline: none;
+  border-color: var(--color-navy);
+  box-shadow: 0 0 0 3px rgba(7, 16, 91, 0.08);
+}
+.labels-total {
+  font-size: 13px;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+/* ── Grid ───────────────────────────────────────────────────── */
+.labels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* ── Card ───────────────────────────────────────────────────── */
+.label-card-front {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--color-line);
+  box-shadow: 0 2px 12px rgba(7, 16, 91, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.22s, transform 0.22s;
+}
+.label-card-front:hover {
+  box-shadow: 0 10px 36px rgba(7, 16, 91, 0.13);
+  transform: translateY(-4px);
+}
+
+/* Card header: navy bar */
+.label-card-front__header {
+  background: var(--color-navy);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.label-card-front__header h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.label-card-front__badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(121, 246, 194, 0.18);
+  color: var(--color-mint);
+  border: 1px solid rgba(121, 246, 194, 0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Card body */
+.label-card-front__body {
+  flex: 1;
+  padding: 0;
+}
+
+/* Section preview */
+.label-card-front__section {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-line);
+}
+.label-card-front__section:last-child {
+  border-bottom: none;
+}
+.label-card-front__section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.label-card-front__section-head > div {
+  flex: 1;
+  min-width: 0;
+}
+.label-card-front__logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--color-line);
+  flex-shrink: 0;
+  background: var(--color-ivory);
+}
+.label-card-front__heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.label-card-front__subheading {
+  font-size: 11px;
+  color: var(--color-ink-soft);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Numbered rows */
+.label-card-front__row {
+  display: grid;
+  grid-template-columns: 22px 1fr auto 1fr;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(7, 16, 91, 0.06);
+  font-size: 12px;
+}
+.label-card-front__row:last-of-type {
+  border-bottom: none;
+}
+.label-card-front__num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-ivory);
+  border: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-ink-soft);
+  flex-shrink: 0;
+}
+.label-card-front__key {
+  font-weight: 600;
+  color: var(--color-navy);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.label-card-front__arrow {
+  color: var(--color-mint-dim);
+  font-size: 10px;
+  font-weight: 700;
+}
+.label-card-front__val {
+  text-align: right;
+  color: var(--color-ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.label-card-front__more {
+  font-size: 11px;
+  color: var(--color-ink-soft);
+  margin: 6px 0 0;
+  font-style: italic;
+}
+.label-card-front__more-sec {
+  font-size: 11px;
+  color: var(--color-ink-soft);
+  margin: 0;
+  padding: 8px 20px;
+  border-top: 1px solid var(--color-line);
+  font-style: italic;
+}
+
+/* Card footer */
+.label-card-front__footer {
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--color-line);
+  background: var(--color-ivory);
+}
+.label-card-front__date {
+  font-size: 12px;
+  color: var(--color-ink-soft);
+}
+.label-card-front__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Action icon buttons */
+.label-front-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border: 1.5px solid var(--color-line);
+  background: white;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  text-decoration: none;
+  color: inherit;
+}
+.label-front-action-btn:hover {
+  background: var(--color-navy);
+  border-color: var(--color-navy);
+  transform: scale(1.1);
+}
+.label-front-action-btn--dl:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── States ─────────────────────────────────────────────────── */
+.labels-error {
+  background: #fff0f0;
+  border: 1px solid #f5a8a8;
+  color: #9e2025;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.labels-error p { margin: 0; }
+
+.labels-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 20px;
+  gap: 16px;
+  color: var(--color-ink-soft);
+}
+.labels-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid var(--color-line);
+  border-top-color: var(--color-navy);
+  border-radius: 50%;
+  animation: ls-spin 0.8s linear infinite;
+}
+@keyframes ls-spin { to { transform: rotate(360deg); } }
+
+.labels-empty {
+  text-align: center;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.labels-empty__icon { font-size: 56px; }
+.labels-empty h3 {
+  color: var(--color-navy);
+  margin: 0;
+  font-size: 1.25rem;
+}
+.labels-empty p {
+  color: var(--color-ink-soft);
+  margin: 0 0 8px;
+}
+
+/* ── Pagination ──────────────────────────────────────────────── */
+.labels-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+.labels-page-info {
+  font-size: 13px;
+  color: var(--color-ink-soft);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .labels-main { padding-top: 90px; }
+  .labels-page-header { flex-direction: column; align-items: flex-start; }
+  .labels-grid { grid-template-columns: 1fr; }
+  .labels-pagination { flex-direction: column; }
+}
+@media (max-width: 480px) {
+  .label-card-front__row { grid-template-columns: 20px 1fr auto; }
+  .label-card-front__val { display: none; }
+}

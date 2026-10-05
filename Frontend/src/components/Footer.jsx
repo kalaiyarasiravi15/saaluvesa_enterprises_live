@@ -11,23 +11,16 @@ export default function Footer() {
       <div className="wrap site-footer__grid">
         {/* Column 1: Brand & Registration */}
         <div className="site-footer__brand">
-          <div className="site-footer__brand-row notranslate" translate="no">
+          <div className="site-footer__brand-col notranslate" translate="no">
             <img className="brand__logo" src={logo} alt="Saaluvesa" />
             <span className="brand__text notranslate" translate="no">
               SAALU<span>VESA</span>
             </span>
           </div>
-          <p className="site-footer__brand-desc">
-            <strong className="notranslate" translate="no">Saaluvesa Enterprises Private Limited</strong> — Premier custom apparel manufacturing, textile production, and global export solutions.
-          </p>
-          <div className="site-footer__trust-badge">
-            <span className="trust-badge__dot" />
-            <span>Inc. 2025 • Registered Garment Exporter</span>
-          </div>
         </div>
 
         {/* Column 2: Navigate */}
-        <div className="site-footer__col">
+        <div className="site-footer__col site-footer__col--nav">
           <h4>Navigate</h4>
           <Link to="/">Home</Link>
           <Link to="/about">About Us</Link>
@@ -35,22 +28,9 @@ export default function Footer() {
           <Link to="/contact">Contact Us</Link>
         </div>
 
-        {/* Column 3: Order */}
-        <div className="site-footer__col">
-          <h4>Order</h4>
-          <a
-            href="https://castbull.co.in"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="site-footer__castbull-link"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="footer-icon">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-            <span className="notranslate" translate="no">castbull.co.in</span>
-          </a>
+        {/* Column 3: Contact Mail and Contact Number */}
+        <div className="site-footer__col site-footer__col--contact">
+          <h4>Contact Mail and Contact Number</h4>
 
           <a href="mailto:contact@saaluvesa.com" className="site-footer__contact-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="footer-icon">
@@ -69,7 +49,7 @@ export default function Footer() {
         </div>
 
         {/* Column 4: Sourcing */}
-        <div className="site-footer__col">
+        <div className="site-footer__col site-footer__col--sourcing">
           <h4>Sourcing</h4>
           <div className="site-footer__hours">
             <span className="hours-label">Sourcing Support</span>
@@ -77,41 +57,46 @@ export default function Footer() {
           </div>
           <div className="site-footer__exports">
             <span className="exports-label">Global Exports</span>
-            <span className="exports-val">USA, Europe, UAE, Australia &amp; Worldwide</span>
+            <span className="exports-val">USA, Europe, Australia &amp; Worldwide</span>
           </div>
         </div>
 
         {/* Column 5: Registered Office */}
-        <div className="site-footer__col">
+        <div className="site-footer__col site-footer__col--office">
           <h4>Registered Office</h4>
           <div className="site-footer__address">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="footer-icon footer-icon--location">
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
-            <p>
-              Dr.No.18/76, Thiru.Ve.Ka. St,
-              <br />
-              Punjai Puliampatti, Sathyamangalam,
-              <br />
-              Erode, Tamil Nadu – 638459, India
-            </p>
+            <a 
+              href="https://maps.app.goo.gl/gK7DXZfcxnwXErxB7?g_st=aw" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <p>
+                Dr.No.18/76, Thiru.Ve.Ka. St,
+                <br />
+                Punjai Puliampatti, Sathyamangalam,
+                <br />
+                Erode, Tamil Nadu – 638459, India
+              </p>
+            </a>
           </div>
         </div>
       </div>
 
       <div className="wrap site-footer__bottom">
-        <span className="site-footer__copy">
+        <p className="site-footer__copy">
           Copyright &copy; {year} <span className="notranslate" translate="no">Saaluvesa Enterprises Private Limited</span>.
-        </span>
-        <span className="site-footer__dev">
+        </p>
+        <p className="site-footer__dev">
           Developed by{" "}
-          <strong>
-            <a href="https://saitechnosolutions.com/" target="_blank" rel="noopener noreferrer" className="notranslate" translate="no">
-              Sai Techno Solutions
-            </a>
-          </strong>
-        </span>
+          <a href="https://saitechnosolutions.com/" target="_blank" rel="noopener noreferrer" className="notranslate" translate="no">
+            Sai Techno Solutions
+          </a>
+        </p>
       </div>
     </footer>
   );

@@ -1,5 +1,5 @@
 const API_URL =
-  import.meta.env.VITE_ADMIN_API_URL || "http://localhost:5000/api";
+  import.meta.env.VITE_ADMIN_API_URL || "http://localhost:3000/api";
 
 const ACCESS_KEY = "saaluvesa_admin_access_token";
 const REFRESH_KEY = "saaluvesa_admin_refresh_token";

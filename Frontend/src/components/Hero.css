@@ -140,6 +140,7 @@
 .hero__notice-link {
   display: inline-flex;
   align-items: center;
+  vertical-align: baseline;
   gap: 4px;
   color: var(--color-mint);
   font-weight: 600;

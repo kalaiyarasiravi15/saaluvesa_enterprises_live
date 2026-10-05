@@ -114,15 +114,6 @@ export default function Header() {
             <LanguageSelector />
           </div>
 
-          <a
-            href="https://castbull.co.in/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn--mint btn--pill site-header__cta"
-          >
-            Order Apparels
-          </a>
-
           {/* Language selector - mobile/tablet (visible below 960px, next to hamburger) */}
           <div className="site-header__lang-mobile">
             <LanguageSelector />
@@ -144,15 +135,6 @@ export default function Header() {
         {menuOpen && (
           <nav id="mobile-nav" className="site-nav--mobile" aria-label="Mobile">
             {NAV_LINKS.map((link) => renderLink(link, handleNavigate))}
-            <a
-              href="https://castbull.co.in/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn--mint btn--pill site-nav--mobile-cta"
-              onClick={closeMenu}
-            >
-              Order Apparels
-            </a>
           </nav>
         )}
       </header>
