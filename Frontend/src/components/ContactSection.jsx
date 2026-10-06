@@ -172,6 +172,17 @@ export default function ContactSection() {
           </p> */}
 
           <div className="contact-section__block">
+            <h3>Corporate Identity & Compliance</h3>
+            <p>
+              CIN - U46900TZ2025PTC036041
+              <br />
+              GSTIN - 33ABRCS3304A1ZR
+              <br />
+              IEC - ABRCS3304A
+            </p>
+          </div>
+
+          <div className="contact-section__block">
             <h3>Registered Office</h3>
             <p>
               Saaluvesa Enterprises Pvt Ltd

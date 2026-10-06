@@ -8,8 +8,6 @@ import Header from "../components/Header";
 import PageBanner from "../components/PageBanner";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
-import aboutBannerBg from "../assets/hero_bg.jpg";
-import ourStoryImg from "../assets/about_our_story.jpg";
 
 const ICONS = {
   "trending-up": (
@@ -77,7 +75,6 @@ export default function About() {
 
       {/* ---------- Banner ---------- */}
       <PageBanner
-        bgImage={aboutBannerBg}
         title="About Us"
       />
 
@@ -105,11 +102,22 @@ export default function About() {
                 platforms, and trading facilities, while also aiming to build strong partnerships at
                 national and international level.
               </p>
+              <p>
+                As a registered Indian private limited company, we maintain all mandatory business registrations required for domestic operations and international trade.
+              </p>
+              <ul className="about-compliance-list">
+                <li><strong>Corporate Identification Number (CIN)</strong> - U46900TZ2025PTC036041</li>
+                <li><strong>Goods and Services Tax Identification Number (GSTIN)</strong> – 33ABRCS3304A1ZR</li>
+                <li><strong>Importer Exporter Code (IEC)</strong> - ABRCS3304A</li>
+              </ul>
+              <p>
+                These registrations enable us to conduct business responsibly, transparently, and in accordance with applicable regulatory requirements.
+              </p>
             </div>
             <div className="about-overview__image-wrap" data-animate="fade-right">
               <img
-                src={ourStoryImg}
-                alt="Saaluvesa Enterprises Workshop and Operations"
+                src="/whoweare-baner.jpeg"
+                alt="Saaluvesa Enterprises Global Trade & Exports"
                 className="about-overview__image"
               />
             </div>

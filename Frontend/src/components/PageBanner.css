@@ -10,12 +10,21 @@
   min-height: clamp(160px, 20vw, 240px);
   padding: clamp(38px, 6vw, 72px) clamp(16px, 3.5vw, 24px);
   width: 100%;
-  background-color: #79F6C2;
+  background-color: #050a3c;
+  background-image: linear-gradient(135deg, #050a3c 0%, #07105b 55%, #0b1a6b 100%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-bottom: 2px solid rgba(5, 10, 60, 0.12);
   box-shadow: 0 4px 16px rgba(7, 16, 91, 0.08);
+}
+
+.page-banner--plain {
+  background: linear-gradient(135deg, #050a3c 0%, #07105b 55%, #0a1860 100%);
+}
+
+.page-banner--plain .page-banner__overlay {
+  display: none;
 }
 
 .page-banner__overlay {

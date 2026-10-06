@@ -4,7 +4,7 @@ import "./PageBanner.css";
 export default function PageBanner({ title, subtitle, bgImage }) {
   return (
     <section
-      className="page-banner"
+      className={`page-banner ${!bgImage ? "page-banner--plain" : ""}`}
       style={bgImage ? { backgroundImage: `url(${bgImage})` } : undefined}
     >
       <div className="page-banner__overlay" />

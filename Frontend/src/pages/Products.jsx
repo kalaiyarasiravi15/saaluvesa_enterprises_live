@@ -8,7 +8,6 @@ import ProductsTeaser from "../components/ProductsTeaser";
 import ProductsProcess from "../components/ProductsProcess";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
-import productsBannerBg from "../assets/product_textiles.jpg";
 
 export default function Products() {
   return (
@@ -17,7 +16,6 @@ export default function Products() {
 
       {/* ---------- Banner ---------- */}
       <PageBanner
-        bgImage={productsBannerBg}
         title="Products"
         subtitle="Built for Global Export"
       />

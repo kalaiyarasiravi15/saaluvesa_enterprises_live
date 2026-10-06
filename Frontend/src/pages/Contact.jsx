@@ -6,10 +6,8 @@ import Header from "../components/Header";
 import PageBanner from "../components/PageBanner";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
-import contactBannerBg from "../assets/whatwedo_exports.jpg";
 
 export default function Contact() {
-  const animRef = useScrollAnimation();
   const mapAddressQuery = encodeURIComponent(
     "Saaluvesa Enterprises Private Limited, Punjai Puliampatti, Sathyamangalam, Erode, Tamil Nadu 638459"
   );
@@ -21,7 +19,6 @@ export default function Contact() {
 
       {/* ---------- Banner ---------- */}
       <PageBanner
-        bgImage={contactBannerBg}
         title="Contact Us"
         subtitle="Get in touch — we'd love to hear from you"
       />
