@@ -8,6 +8,7 @@ import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
 
 export default function Contact() {
+  const animRef = useScrollAnimation();
   const mapAddressQuery = encodeURIComponent(
     "Saaluvesa Enterprises Private Limited, Punjai Puliampatti, Sathyamangalam, Erode, Tamil Nadu 638459"
   );
