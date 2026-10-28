@@ -61,4 +61,4 @@ npm run build           # Builds admin production bundles to dist/
 ## Production Deployment URLs
 - **Storefront**: [https://saaluvesa.com](https://saaluvesa.com)
 - **Admin Dashboard**: [https://saaluvesadashboard.saaluvesa.com](https://saaluvesadashboard.saaluvesa.com)
-- **API Server**: [https://saaluvesaapi.saaluvesa.com](https://saaluvesaapi.saaluvesa.com)
+- **API Server**: [https://saaluvesaapi.com](https://saaluvesaapi.com)

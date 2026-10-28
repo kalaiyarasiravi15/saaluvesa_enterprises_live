@@ -31,7 +31,7 @@ const allowedOrigins = String(process.env.CORS_ORIGIN || process.env.CLIENT_ORIG
 app.use(cors({
   origin(origin, callback) {
     // Allow requests without Origin, such as health checks and server-to-server calls.
-    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
+    if (!origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin.replace(/\/$/, ""))) {
       return callback(null, true);
     }
     return callback(new Error("Origin is not allowed by CORS"));

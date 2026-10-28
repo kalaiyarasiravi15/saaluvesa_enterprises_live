@@ -1,6 +1,6 @@
 -- ====================================================================
 -- Saaluvesa Enterprises - Complete Database Schema & Migration SQL
--- Target Database: stsforce_saaluvesadata
+-- Target Database: sts_saaluvesa_db
 -- ====================================================================
 
 SET FOREIGN_KEY_CHECKS = 0;

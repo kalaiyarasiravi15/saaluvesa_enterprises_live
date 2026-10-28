@@ -9,10 +9,10 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 dotenv.config();
 
-export const databaseName = process.env.DB_NAME || "stsforce_saaluvesadata";
-const rawPassword = process.env.DB_PASSWORD || "8#BW5Th!&e";
+export const databaseName = process.env.DB_NAME || "sts_saaluvesa_db";
+const rawPassword = process.env.DB_PASSWORD || "3@&skynK9z";
 const dbPassword = rawPassword.replace(/^['"]|['"]$/g, "");
-const dbUser = process.env.DB_USER || "stsforce_saaluvesauser";
+const dbUser = process.env.DB_USER || "sts_saaluvesauser";
 const dbHost = process.env.DB_HOST || "localhost";
 const dbPort = Number(process.env.DB_PORT || 3306);
 
