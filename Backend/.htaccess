@@ -1,2 +1,11 @@
+# Webuzo Apache Reverse Proxy to Node.js on port 30003
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ http://127.0.0.1:30003/$1 [P,L]
+</IfModule>
+
 # CORS is configured by Express from CORS_ORIGIN in the Node application.
 # Do not set Access-Control-Allow-Origin here; duplicate headers break browsers.
