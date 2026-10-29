@@ -364,7 +364,7 @@ async function start() {
     console.error("Database connection warning:", error.message || error);
   }
 
-  const port = process.env.PORT || 30008;
+  const port = process.env.PORT || 30003;
 
   const server = app.listen(port, () => {
     console.log(`Saaluvesa API server listening on ${port}`);
